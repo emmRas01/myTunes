@@ -11,6 +11,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
+import java.io.*;
+
 public class MyTunesController {
 
     @FXML
@@ -126,5 +128,70 @@ public class MyTunesController {
     @FXML
     void handleSkipSong(ActionEvent event) {
 
+    }
+
+    //metode der gemmer en liste af Playlist-objekter i filen playlists.txt
+    private void skrivPlaylisteObjekter(ObservableList<Playlist> playlists) throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream("playlists.txt");
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+        objectOutputStream.writeInt(playlists.size());
+        for (Playlist p : playlists)
+            objectOutputStream.writeObject(p);
+
+        objectOutputStream.flush();
+        objectOutputStream.close();
+    }
+
+    //metode der gemmer en liste af Song-objekter i filen songs.txt
+    private void skrivSongsObjekter(ObservableList<Song> songs) throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream("songs.txt");
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+        objectOutputStream.writeInt(songs.size());
+        for (Song s : songs)
+            objectOutputStream.writeObject(s);
+
+        objectOutputStream.flush();
+        objectOutputStream.close();
+    }
+
+    //metode der bruges til at gemme data når brugeren lukker vinduet
+    public void gemData() throws IOException
+    {
+        skrivPlaylisteObjekter(playlister);//gemmer Playlist objekter i filen ordrer.txt
+        skrivSongsObjekter(sange); //gemmer Song objekter i filen varelager.txt
+    }
+
+    //metode der indlæser gemte Playlister fra filen playlists.txt
+    private ObservableList<Playlist> læsPlaylistObjekter() throws IOException, ClassNotFoundException {
+        ObservableList<Playlist> liste = FXCollections.observableArrayList();
+        FileInputStream fileInputStream = new FileInputStream("playlists.txt");
+        ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+        int antal = objectInputStream.readInt();
+        for (int i = 0; i < antal; ++i) {
+            Playlist p = (Playlist) objectInputStream.readObject();
+            liste.add(p);
+        }
+
+        objectInputStream.close();
+        return (ObservableList<Playlist>) liste;
+    }
+
+    //metode der indlæser gemte varer fra filen songs.txt
+    private ObservableList<Song> læsVareObjekter() throws IOException, ClassNotFoundException {
+        ObservableList<Song> liste = FXCollections.observableArrayList();
+        FileInputStream fileInputStream = new FileInputStream("songs.txt");
+        ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+        int antal = objectInputStream.readInt();
+        for (int i = 0; i < antal; ++i) {
+            Song s = (Song)objectInputStream.readObject();
+            liste.add(s);
+        }
+
+        objectInputStream.close();
+        return (ObservableList<Song>) liste;
     }
 }

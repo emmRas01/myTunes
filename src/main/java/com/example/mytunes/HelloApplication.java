@@ -15,5 +15,15 @@ public class HelloApplication extends Application {
         stage.setTitle("MyTunes");
         stage.setScene(scene);
         stage.show();
+
+        //Når brugeren lukker vinduet på kryds, så gemmes data i filen
+        MyTunesController controller = fxmlLoader.getController(); //finder vores controller
+        stage.setOnCloseRequest(e -> {
+            try {
+                controller.gemData(); //alle objekterne gemmes i filerne
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
 }
