@@ -4,14 +4,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 
 import java.io.*;
+import java.util.Optional;
 
 public class MyTunesController {
 
@@ -65,8 +62,41 @@ public class MyTunesController {
     }
 
     @FXML
-    void handleAddNewSong(ActionEvent event) {
+    void handleAddNewSong(ActionEvent event)
+    {
+        Dialog<ButtonType> dialog = new Dialog<>(); //Opretter en ny dialogboks, hvor knapperne (OK/Cancel) er typen ButtonType
+        dialog.setTitle("Add new song"); //titlen i vinduet
+        dialog.setHeaderText("Enter information about the new song"); //overskrift
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
+        //Opretter tekstfelter til title, artist, category, time
+        TextField titleFelt = new TextField();
+        titleFelt.setPromptText("Title");
+        TextField artistFelt = new TextField();
+        artistFelt.setPromptText("Artist");
+        TextField categoryFelt = new TextField();
+        categoryFelt.setPromptText("Category");
+        TextField timeFelt = new TextField();
+        timeFelt.setPromptText("Time");
+
+        //opretter en VBox med 4 tekstfelter og med 10 pixels mellemrum
+        VBox box = new VBox(10, titleFelt, artistFelt, categoryFelt, timeFelt);
+        dialog.getDialogPane().setContent(box); //VBoxen sættes ind som indhold i dialogboksen
+
+        Optional<ButtonType> resultat = dialog.showAndWait(); //viser dialogen og stopper og venter på at brugeren klikker OK eller Cancel
+
+        if (resultat.isPresent() && resultat.get() == ButtonType.OK) //Tjekker om brugeren har valgt en knap og om det er OK-knappen
+        {
+            String title = titleFelt.getText(); //henter den tekst brugeren har skrevet i felterne
+            String artist = artistFelt.getText();
+            String category = categoryFelt.getText();
+            String time = timeFelt.getText();
+
+            Song nySang = new Song(title, artist, category, time); //opretter det nye sang objekt
+            sange.add(nySang); //den nye sang tilføjes til vores ObservableList sange
+            tableViewSongs.refresh(); //tableView opdateres
+            //tableViewSongs.sort();
+        }
     }
 
     @FXML
