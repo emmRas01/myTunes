@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane hgap="18.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" vgap="18.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="599.0462646484375" minWidth="10.0" prefWidth="194.4657440185547" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="599.0462646484375" minWidth="10.0" prefWidth="157.37399291992188" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="669.9146423339844" minWidth="10.0" prefWidth="190.12600708007812" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="719.450927734375" minWidth="10.0" prefWidth="118.7264404296875" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="759.7675170898438" minWidth="10.0" prefWidth="480.7735595703125" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="474.6829833984375" minWidth="0.0" prefWidth="68.4195556640625" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="951.5" minWidth="10.0" prefWidth="567.0804443359375" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="95.0" minHeight="0.0" prefHeight="54.11913299560547" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="174.88086700439453" minHeight="10.0" prefHeight="25.005401611328125" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="204.0" minHeight="0.0" prefHeight="13.530654907226562" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="745.4693450927734" minHeight="10.0" prefHeight="745.4693450927734" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="106.0" minHeight="10.0" prefHeight="31.34442138671875" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="65.0325927734375" minHeight="0.0" prefHeight="52.65557861328125" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="3">
+        <columns>
+          <TableColumn prefWidth="391.4044876098633" text="Name" />
+          <TableColumn minWidth="0.0" prefWidth="69.88015747070312" text="Songs" />
+            <TableColumn prefWidth="114.119873046875" text="Time" />
+        </columns>
+      </TableView>
+      <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="6" GridPane.rowIndex="3">
+        <columns>
+          <TableColumn prefWidth="175.938232421875" text="Title" />
+          <TableColumn prefWidth="220.474853515625" text="Artist" />
+            <TableColumn minWidth="0.0" prefWidth="90.025146484375" text="Category" />
+            <TableColumn prefWidth="73.29150390625" text="Time" />
+        </columns>
+      </TableView>
+      <ListView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+      <Button mnemonicParsing="false" text="⬅" GridPane.columnIndex="5" GridPane.rowIndex="3" GridPane.valignment="TOP">
+         <font>
+            <Font size="31.0" />
+         </font>
+      </Button>
+      <Button mnemonicParsing="false" text="Add new playlist" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
+      <Button mnemonicParsing="false" text="Edit playlist" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+      <Button mnemonicParsing="false" text="Delete playlist" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+      <Button mnemonicParsing="false" text="⬇" GridPane.columnIndex="3" GridPane.rowIndex="4">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Button>
+      <Button mnemonicParsing="false" text="⬆" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Button>
+      <Button mnemonicParsing="false" text="Delete song from Playlist" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+      <Button mnemonicParsing="false" text="Add new song" GridPane.columnIndex="6" GridPane.rowIndex="4" />
+      <Button mnemonicParsing="false" text="Edit song" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+      <Button mnemonicParsing="false" text="Delete song" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+      <Button mnemonicParsing="false" text="Close" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
+      <TextField prefHeight="26.0" prefWidth="457.0" GridPane.columnIndex="6" GridPane.valignment="BOTTOM" />
+      <Label text="Filter:" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Button mnemonicParsing="false" text="Search" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+      <Label text="Playlists" GridPane.rowIndex="2">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <Label text="Songs on Playlist" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="2">
+         <font>
+            <Font name="System Bold Italic" size="20.0" />
+         </font>
+      </Label>
+      <Label text="Songs" GridPane.columnIndex="6" GridPane.rowIndex="2">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <Label GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+      <Button mnemonicParsing="false" text="Back" GridPane.halignment="RIGHT" />
+      <Button mnemonicParsing="false" text="Play" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+      <Button mnemonicParsing="false" text="Skip" GridPane.columnIndex="2" GridPane.halignment="LEFT" />
+      <Slider maxWidth="300.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+      <Label text="Volumen" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
+   </children>
+   <padding>
+      <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
+   </padding>
+</GridPane>
