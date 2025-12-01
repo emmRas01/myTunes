@@ -1,5 +1,7 @@
 package com.example.mytunes;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -15,40 +17,45 @@ public class MyTunesController {
     private Label currentlyPlayingSong;
 
     @FXML
-    private TableColumn<?, ?> kolonneArtist;
+    private TableColumn<Song, String> kolonneArtist;
 
     @FXML
-    private TableColumn<?, ?> kolonneCategory;
+    private TableColumn<Song, String> kolonneCategory;
 
     @FXML
-    private TableColumn<?, ?> kolonneName;
+    private TableColumn<Playlist, String> kolonneName;
 
     @FXML
-    private TableColumn<?, ?> kolonnePlaylistTime;
+    private TableColumn<Playlist, String> kolonnePlaylistTime;
 
     @FXML
-    private TableColumn<?, ?> kolonneSongTime;
+    private TableColumn<Song, String> kolonneSongTime;
 
     @FXML
-    private TableColumn<?, ?> kolonneSongs;
+    private TableColumn<Playlist, String> kolonneSongs;
 
     @FXML
-    private TableColumn<?, ?> kolonneTitle;
+    private TableColumn<Song, String> kolonneTitle;
 
     @FXML
-    private ListView<?> listViewSongsOnPlaylist;
+    private ListView<Song> listViewSongsOnPlaylist;
 
     @FXML
     private TextField searchField;
 
     @FXML
-    private TableView<?> tableViewPlaylists;
+    private TableView<Playlist> tableViewPlaylists;
 
     @FXML
-    private TableView<?> tableViewSongs;
+    private TableView<Song> tableViewSongs;
 
     @FXML
     private Slider volumenSlider;
+
+    //Definition af listerne der holder dataene
+    private ObservableList<Playlist> playlister = FXCollections.observableArrayList();
+    private ObservableList<Song> sange = FXCollections.observableArrayList();
+    private final ObservableList<Song> sangeIplayliste = FXCollections.observableArrayList();
 
     @FXML
     void handleAddNewPlaylist(ActionEvent event) {
