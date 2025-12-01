@@ -87,11 +87,20 @@ public class MyTunesController {
 
     @FXML
     void handleDeleteSong(ActionEvent event) {
+        Song s = tableViewSongs.getSelectionModel().getSelectedItem();
+        playlister.remove(s);
 
     }
 
     @FXML
     void handleDeleteSongFromPlaylist(ActionEvent event) {
+        Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem();
+        Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem();
+
+        valgtPlayliste.getSongsList().remove(valgtSang);
+
+        sangeIplayliste.setAll(valgtPlayliste.getSongsList());
+
 
     }
 
