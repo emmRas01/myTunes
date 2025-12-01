@@ -6,12 +6,13 @@ public class Song implements Serializable //denne klasse skal kunne gemmes på e
 {
     private static final long serialVersionUID = 1L; //id til serialisering skal være unikt for hver klasse
 
+    //Definition af title, artist, category, time
     private String title;
     private String artist;
     private String category;
     private String time;
 
-
+    //konstruktør
     public Song(String title, String artist, String category, String time)
     {
         this.title = title;
@@ -20,6 +21,7 @@ public class Song implements Serializable //denne klasse skal kunne gemmes på e
         this.time = time;
     }
 
+    //Der skal være get-metoder og set-metoder for at tableview Songs både kan hente data og indsætte ny data
     public String getTitle()
     {
         return title;
@@ -59,6 +61,7 @@ public class Song implements Serializable //denne klasse skal kunne gemmes på e
         time = tm;
     }
 
+    //Udseende på udskrift i vores listView i midten
     @Override
     public String toString()
     {
