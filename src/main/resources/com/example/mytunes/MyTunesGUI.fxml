@@ -72,7 +72,6 @@
       <Button mnemonicParsing="false" onAction="#handleAddNewSong" text="Add new song" GridPane.columnIndex="6" GridPane.rowIndex="4" />
       <Button mnemonicParsing="false" onAction="#handleEditSong" text="Edit song" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
       <Button mnemonicParsing="false" onAction="#handleDeleteSong" text="Delete song" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-      <Button mnemonicParsing="false" onAction="#handleClose" text="Close" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
       <TextField fx:id="searchField" prefHeight="26.0" prefWidth="457.0" GridPane.columnIndex="6" GridPane.valignment="BOTTOM" />
       <Label text="Filter:" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
          <font>
