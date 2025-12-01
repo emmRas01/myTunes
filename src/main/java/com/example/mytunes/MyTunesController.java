@@ -127,5 +127,4 @@ public class MyTunesController {
     void handleSkipSong(ActionEvent event) {
 
     }
-
 }
