@@ -8,6 +8,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
@@ -94,9 +96,30 @@
          </font>
       </Label>
       <Label fx:id="currentlyPlayingSong" opacity="0.5" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-      <Button mnemonicParsing="false" onAction="#handleBackToPreviousSong" text="Back" GridPane.halignment="RIGHT" />
-      <Button mnemonicParsing="false" onAction="#handlePlaySong" text="Play" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-      <Button mnemonicParsing="false" onAction="#handleSkipSong" text="Skip" GridPane.columnIndex="2" GridPane.halignment="LEFT" />
+      <Button mnemonicParsing="false" onAction="#handleBackToPreviousSong" prefHeight="35.0" prefWidth="38.0" GridPane.halignment="RIGHT">
+         <graphic>
+            <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@previous.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button mnemonicParsing="false" onAction="#handlePlaySong" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+         <graphic>
+            <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@play.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button mnemonicParsing="false" onAction="#handleSkipSong" GridPane.columnIndex="2" GridPane.halignment="LEFT">
+         <graphic>
+            <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@skip.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
       <Slider fx:id="volumenSlider" maxWidth="300.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
       <Label text="Volumen" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
    </children>
