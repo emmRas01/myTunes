@@ -77,10 +77,6 @@ public class MyTunesController {
 
     }
 
-    @FXML
-    void handleClose(ActionEvent event) {
-
-    }
 
     @FXML
     void handleDeletePlaylist(ActionEvent event) {
