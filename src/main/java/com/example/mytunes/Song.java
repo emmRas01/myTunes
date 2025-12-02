@@ -11,14 +11,16 @@ public class Song implements Serializable //denne klasse skal kunne gemmes på e
     private String artist;
     private String category;
     private String time;
+    private String musicFile;
 
     //konstruktør
-    public Song(String title, String artist, String category, String time)
+    public Song(String title, String artist, String category, String time, String musicFile)
     {
         this.title = title;
         this.artist = artist;
         this.category = category;
         this.time = time;
+        this.musicFile = musicFile;
     }
 
     //Der skal være get-metoder og set-metoder for at tableview Songs både kan hente data og indsætte ny data

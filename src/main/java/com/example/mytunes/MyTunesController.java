@@ -5,7 +5,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
 import java.io.*;
 import java.util.Optional;
@@ -56,6 +59,33 @@ public class MyTunesController {
     private ObservableList<Song> sange = FXCollections.observableArrayList();
     private final ObservableList<Song> sangeIplayliste = FXCollections.observableArrayList();
 
+    public void initialize() //køres når programmet starter
+    {
+        //Kolonnerne sættes op med forbindelse til klassen Playlist med hver sit felt
+        kolonneName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        kolonneSongs.setCellValueFactory(new PropertyValueFactory<>("song"));
+        kolonnePlaylistTime.setCellValueFactory(new PropertyValueFactory<>("time"));
+
+        //Kolonnerne sættes op med forbindelse til klassen Song med hver sit felt
+        kolonneTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        kolonneArtist.setCellValueFactory(new PropertyValueFactory<>("artist"));
+        kolonneCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
+        kolonneSongTime.setCellValueFactory(new PropertyValueFactory<>("time"));
+
+        //når programmet starter læses data ind fra filen playlists.txt
+        try {
+            playlister = læsPlaylistObjekter();
+            sange = læsSangObjekter();
+        }  catch (Exception e) {
+            System.out.println("Kunne ikke indlæse filen: " + e.getMessage());
+        }
+
+        //i vores TableViews og ListView indsættes objekterne fra vores ObservableLister (playlister, sange og sangeIplayliste)
+        tableViewPlaylists.setItems(playlister);
+        tableViewSongs.setItems(sange);
+        listViewSongsOnPlaylist.setItems(sangeIplayliste);
+    }
+
     @FXML
     void handleAddNewPlaylist(ActionEvent event) {
 
@@ -78,9 +108,30 @@ public class MyTunesController {
         categoryFelt.setPromptText("Category");
         TextField timeFelt = new TextField();
         timeFelt.setPromptText("Time");
+        TextField fileChooserFelt = new TextField();
+        fileChooserFelt.setPromptText("Select a mp3 File");
+        fileChooserFelt.setEditable(false); //gør at brugeren ikke kan taste i feltet
 
-        //opretter en VBox med 4 tekstfelter og med 10 pixels mellemrum
-        VBox box = new VBox(10, titleFelt, artistFelt, categoryFelt, timeFelt);
+        //Opretter en file chooser knap
+        Button selectFileButton = new Button("Select File");
+
+        //sætter action på knappen til file chooser
+        selectFileButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Select a File");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Music File", "*.mp3", "*.wav"));
+        File valgtFil = fileChooser.showOpenDialog(dialog.getDialogPane().getScene().getWindow());
+            if (valgtFil != null) //hvis der er valgt en fil, så sættes tekstfeltet til den valgte fil
+            {
+                fileChooserFelt.setText(valgtFil.getAbsolutePath());
+            }
+        });
+
+        //Opretter en HBox til file chooser feltet og knappen
+        HBox fileChoserBox = new HBox(10, fileChooserFelt, selectFileButton);
+
+        //opretter en VBox med 5 tekstfelter og med 10 pixels mellemrum
+        VBox box = new VBox(10, titleFelt, artistFelt, categoryFelt, timeFelt, fileChooserFelt, fileChoserBox);
         dialog.getDialogPane().setContent(box); //VBoxen sættes ind som indhold i dialogboksen
 
         Optional<ButtonType> resultat = dialog.showAndWait(); //viser dialogen og stopper og venter på at brugeren klikker OK eller Cancel
@@ -91,8 +142,9 @@ public class MyTunesController {
             String artist = artistFelt.getText();
             String category = categoryFelt.getText();
             String time = timeFelt.getText();
+            String musicFile = fileChooserFelt.getText();
 
-            Song nySang = new Song(title, artist, category, time); //opretter det nye sang objekt
+            Song nySang = new Song(title, artist, category, time, musicFile); //opretter det nye sang objekt
             sange.add(nySang); //den nye sang tilføjes til vores ObservableList sange
             tableViewSongs.refresh(); //tableView opdateres
             //tableViewSongs.sort();
@@ -219,7 +271,7 @@ public class MyTunesController {
     }
 
     //metode der indlæser gemte varer fra filen songs.txt
-    private ObservableList<Song> læsVareObjekter() throws IOException, ClassNotFoundException {
+    private ObservableList<Song> læsSangObjekter() throws IOException, ClassNotFoundException {
         ObservableList<Song> liste = FXCollections.observableArrayList();
         FileInputStream fileInputStream = new FileInputStream("songs.txt");
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
