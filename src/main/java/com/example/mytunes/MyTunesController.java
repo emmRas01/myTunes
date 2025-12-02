@@ -196,15 +196,36 @@ public class MyTunesController {
 
 
     @FXML
-    void handleDeletePlaylist(ActionEvent event) {
+    void handleDeletePlaylist(ActionEvent event)
+    {
+        Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem(); //henter den playliste som brugeren har markeret
+
+        if (valgtPlayliste != null) //hvis brugeren har markeret en playliste
+        {
+            playlister.remove(valgtPlayliste); //fjernes den fra playlist listen (ObservableList Playlister)
+            sangeIplayliste.clear(); //clear listView'et
+        }
+        else //hvis brugeren ikke har markeret en ordre, så meldes der fejl
+        {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please choose a Playlist to Delete!");
+            alert.showAndWait();
+        }
 
     }
 
     @FXML
-    void handleDeleteSong(ActionEvent event) {
-        Song s = tableViewSongs.getSelectionModel().getSelectedItem();
-        playlister.remove(s);
+    void handleDeleteSong(ActionEvent event)
+    {
+        Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret og gemmer i variablen valgtSang
 
+        if (valgtSang != null) //hvis brugeren har markeret en sang
+        {
+            sange.remove(valgtSang); //fjernes denne sang fra sang listen (ObservableList sange)
+
+        } else { //hvis brugeren ikke har markeret en sang, så meldes der fejl
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Vælg en vare, der skal slettes!");
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -215,8 +236,6 @@ public class MyTunesController {
         valgtPlayliste.getSongsList().remove(valgtSang);
 
         sangeIplayliste.setAll(valgtPlayliste.getSongsList());
-
-
     }
 
     @FXML
