@@ -8,6 +8,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 
 import java.io.*;
@@ -58,6 +60,9 @@ public class MyTunesController {
     private ObservableList<Playlist> playlister = FXCollections.observableArrayList();
     private ObservableList<Song> sange = FXCollections.observableArrayList();
     private final ObservableList<Song> sangeIplayliste = FXCollections.observableArrayList();
+
+    //media objekt sættes op her, så den ikke bliver fjernet af garbage collectoren
+    private static MediaPlayer mediaPlayer;
 
     public void initialize() //køres når programmet starter
     {
@@ -257,8 +262,37 @@ public class MyTunesController {
     }
 
     @FXML
-    void handlePlaySong(ActionEvent event) {
+    protected void handlePlaySong(ActionEvent event)
+    {
+        Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
 
+        if (valgtSang == null) //hvis brugeren ikke har valgt en sang kommer der en advarsel op
+        {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please choose a Song to Play!");
+            alert.showAndWait();
+        }
+
+        try
+        {
+            String filSti = new File(valgtSang.getMusicFile()).toURI().toString(); //henter fil-stien til sangen via getMusicFile()
+
+            if (mediaPlayer != null) //hvis der i forvejen afspilles musik, stoppes den
+            {
+                mediaPlayer.stop();
+            }
+
+            //opretter Medie med den markerede sang og Medieplayer med mediet
+            Media media = new Media(filSti);
+            mediaPlayer = new MediaPlayer(media);
+
+            //udskriver hvilken sang der afspilles, så brugeren kan se det
+            currentlyPlayingSong.setText(valgtSang.getTitle());
+
+            mediaPlayer.play(); //afspiller sangen
+
+        } catch (Exception e) { //hvis der sker fejl får brugeren besked
+            currentlyPlayingSong.setText("Error playing song");
+        }
     }
 
     @FXML

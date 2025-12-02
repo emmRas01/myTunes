@@ -3,6 +3,7 @@ module com.example.mytunes {
     requires javafx.fxml;
     requires javafx.base;
     requires javafx.graphics;
+    requires javafx.media;
 
 
     opens com.example.mytunes to javafx.fxml;
