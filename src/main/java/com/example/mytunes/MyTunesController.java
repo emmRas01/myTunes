@@ -7,6 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -209,6 +212,44 @@ public class MyTunesController {
         }
     }
 
+    //metode til hvad der sker hvis brugeren klikker 1 eller 2 gange på en playliste
+    @FXML
+    void museklikPlaylists(MouseEvent event)
+    {
+        if(event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 1) //hvis brugeren klikker 1 gang
+        {
+            Playlist p = tableViewPlaylists.getSelectionModel().getSelectedItem(); //variabel der gemmer den playliste der er markeret
+            if (p != null) //tjek at der er en markeret playliste
+            {
+                sangeIplayliste.setAll(p.getSongsList()); //vises de sange der tilhørere playlisten
+            }
+        } else
+        if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) //hvis brugeren klikker 2 gange
+        {
+            Playlist p = tableViewPlaylists.getSelectionModel().getSelectedItem(); //variabel der gemmer den playliste der er markeret
+            if (p != null) { //tjek at der er en markeret playliste
+                redigerPlaylistLinje(p); //kalder redigerings vinduet
+            }
+        }
+    }
+
+    //metode til hvad der sker hvis brugeren bruger piletast op eller ned i playliste tableview
+    @FXML
+    void tastOpNedPlaylists(KeyEvent event)
+    {
+        switch (event.getCode()) //getCode henter hvilken tast brugeren har klikket på
+        {
+            case UP: //pil up tasten -> ingen break efter, da den skal udføre samme handling for begge taster
+            case DOWN: //pil ned tasten
+                Playlist p = tableViewPlaylists.getSelectionModel().getSelectedItem(); //henter den playliste som brugeren har markeret
+                if (p != null)
+                {
+                    sangeIplayliste.setAll(p.getSongsList()); //så vises sange der tilhører playlisten
+                }
+                break;
+        }
+    }
+
     @FXML
     void handleBackToPreviousSong(ActionEvent event) {
 
@@ -261,9 +302,19 @@ public class MyTunesController {
         Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem();
         Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem();
 
-        valgtPlayliste.getSongsList().remove(valgtSang);
+        if (valgtPlayliste != null && valgtSang != null) {
+            valgtPlayliste.getSongsList().remove(valgtSang);
 
-        sangeIplayliste.setAll(valgtPlayliste.getSongsList());
+            sangeIplayliste.setAll(valgtPlayliste.getSongsList());
+
+            //sætter markøren til den sidste sang i listViewet -> så brugeren kan slette hele listen hurtigt ved behov
+            listViewSongsOnPlaylist.getSelectionModel().selectLast();
+        }
+        else //error hvis brugeren ikke har markeret både en playliste og en sang
+        {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a Playlist and a song!");
+            alert.showAndWait();
+        }
     }
 
     @FXML

@@ -34,7 +34,7 @@
       <RowConstraints maxHeight="65.0325927734375" minHeight="0.0" prefHeight="52.65557861328125" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <TableView fx:id="tableViewPlaylists" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="3">
+      <TableView fx:id="tableViewPlaylists" onKeyPressed="#tastOpNedPlaylists" onMouseClicked="#museklikPlaylists" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="3">
         <columns>
           <TableColumn fx:id="kolonneName" prefWidth="228.5" text="Name" />
           <TableColumn fx:id="kolonneSongs" minWidth="0.0" prefWidth="58.0" text="Songs" />
