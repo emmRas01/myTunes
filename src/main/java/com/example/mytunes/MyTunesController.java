@@ -195,6 +195,14 @@ public class MyTunesController {
     @FXML
     void handleBackToPreviousSong(ActionEvent event) {
 
+        int index = tableViewSongs.getSelectionModel().getSelectedIndex();
+
+        // Hvis vi ikke er på første sang → vælg forrige
+        if (index > 0) {
+            tableViewSongs.getSelectionModel().select(index - 1);
+            tableViewSongs.scrollTo(index - 1);
+        }
+
     }
 
 
@@ -306,6 +314,12 @@ public class MyTunesController {
 
     @FXML
     void handleSkipSong(ActionEvent event) {
+
+        int index = tableViewSongs.getSelectionModel().getSelectedIndex();
+        if (index < sange.size() - 1) {
+            tableViewSongs.getSelectionModel().select(index + 1);
+            tableViewSongs.scrollTo(index + 1);
+        }
 
     }
 

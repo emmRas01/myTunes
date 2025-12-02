@@ -67,6 +67,10 @@ public class Song implements Serializable //denne klasse skal kunne gemmes på e
     {
         return musicFile;
     }
+    public void setMusicFile(String musicFile)
+    {
+        this.musicFile = musicFile;
+    }
 
     //Udseende på udskrift i vores listView i midten
     @Override
