@@ -188,9 +188,25 @@ public class MyTunesController {
         }
     }
 
+    //når brugeren klikker på knappen med en pilen (peger til siden) Tilføjes den markeret sang til den markerede playliste
     @FXML
-    void handleAddSongToPlaylist(ActionEvent event) {
+    void handleAddSongToPlaylist(ActionEvent event)
+    {
+        Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem(); //henter den playliste som brugeren har markeret
+        Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
 
+        if (valgtPlayliste != null && valgtSang != null) //hvis brugeren har valgt en Playliste og en Sang
+        {
+            //sangen tilføjes til playlisten (gemmes i vores ArrayList songs der findes under Playlist-klassen)
+            valgtPlayliste.tilføjSang(valgtSang);
+
+            //Opdaterer ObservableList sangeIplayliste
+            sangeIplayliste.setAll(valgtPlayliste.getSongsList());
+
+        } else { //Hvis brugeren ikke markere både en ordre og en vare, så meldes der en fejl
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a Song and a Playlist!");
+            alert.show();
+        }
     }
 
     @FXML

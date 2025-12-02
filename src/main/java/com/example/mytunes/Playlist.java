@@ -24,7 +24,7 @@ public class Playlist implements Serializable //denne klasse skal kunne gemmes p
     }
 
     //Metode til at tilføje en sang til arrayListen der indeholder de sange der tilhører en playliste
-    public void tilføjVare(Song s)
+    public void tilføjSang(Song s)
     {
         songs.add(s);
     }
