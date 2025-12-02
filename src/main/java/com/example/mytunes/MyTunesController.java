@@ -6,6 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -276,7 +278,7 @@ public class MyTunesController {
         {
             String filSti = new File(valgtSang.getMusicFile()).toURI().toString(); //henter fil-stien til sangen via getMusicFile()
 
-            if (mediaPlayer != null) //hvis der i forvejen afspilles musik, stoppes den
+            if (mediaPlayer != null) //hvis der i forvejen afspilles musik, stoppes den inden den nye valgte sang afspilles
             {
                 mediaPlayer.stop();
             }
