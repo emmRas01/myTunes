@@ -297,6 +297,11 @@ public class MyTunesController {
 
     @FXML
     void handleSearch(ActionEvent event) {
+        String searchTerm = searchField.getText().toLowerCase();
+        ObservableList<Song> filteredSongs = sange.filtered(song ->
+                song.getTitle().toLowerCase().contains(searchTerm)
+        );
+        tableViewSongs.setItems(filteredSongs);
     }
 
     @FXML
