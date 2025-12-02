@@ -87,7 +87,40 @@ public class MyTunesController {
     }
 
     @FXML
-    void handleAddNewPlaylist(ActionEvent event) {
+    void handleAddNewPlaylist(ActionEvent event)
+    {
+        Dialog<ButtonType> dialog = new Dialog<>(); //Opretter en ny dialogboks, hvor knapperne (OK/Cancel) er typen ButtonType
+        dialog.setTitle("Add new playlist"); //titlen i vinduet
+        dialog.setHeaderText("Enter information about the new playlist"); //overskrift
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        //Opretter tekstfelter til title, artist, category, time
+        TextField titleFelt = new TextField();
+        titleFelt.setPromptText("Name");
+        TextField songFelt = new TextField();
+        songFelt.setPromptText("Song");
+        TextField timeFelt = new TextField();
+        timeFelt.setPromptText("Time");
+
+
+        //opretter en VBox med 5 tekstfelter og med 10 pixels mellemrum
+        VBox box = new VBox(10, titleFelt, songFelt, timeFelt);
+        dialog.getDialogPane().setContent(box); //VBoxen sættes ind som indhold i dialogboksen
+
+        Optional<ButtonType> resultat = dialog.showAndWait(); //viser dialogen og stopper og venter på at brugeren klikker OK eller Cancel
+
+        if (resultat.isPresent() && resultat.get() == ButtonType.OK) //Tjekker om brugeren har valgt en knap og om det er OK-knappen
+        {
+            String name = titleFelt.getText(); //henter den tekst brugeren har skrevet i felterne
+            String song = songFelt.getText();
+            String time = timeFelt.getText();
+
+            Playlist nyPlaylist = new Playlist(name, song, time); //opretter det nye sang objekt
+            playlister.add(nyPlaylist); //den nye sang tilføjes til vores ObservableList sange
+            tableViewPlaylists.refresh(); //tableView opdateres
+            //tableViewSongs.sort();
+        }
+
 
     }
 
