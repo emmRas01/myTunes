@@ -63,6 +63,11 @@ public class Song implements Serializable //denne klasse skal kunne gemmes på e
         time = tm;
     }
 
+    public String getMusicFile()
+    {
+        return musicFile;
+    }
+
     //Udseende på udskrift i vores listView i midten
     @Override
     public String toString()
