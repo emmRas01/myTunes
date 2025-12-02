@@ -263,7 +263,6 @@ public class MyTunesController {
 
     @FXML
     void handleSearch(ActionEvent event) {
-
     }
 
     @FXML
