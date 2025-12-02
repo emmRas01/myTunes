@@ -1,5 +1,6 @@
 package com.example.mytunes;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -226,7 +227,7 @@ public class MyTunesController {
             sange.remove(valgtSang); //fjernes denne sang fra sang listen (ObservableList sange)
 
         } else { //hvis brugeren ikke har markeret en sang, så meldes der fejl
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Vælg en vare, der skal slettes!");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please choose a song to delete!");
             alert.showAndWait();
         }
     }
@@ -242,13 +243,27 @@ public class MyTunesController {
     }
 
     @FXML
-    void handleEditPlaylist(ActionEvent event) {
-
+    void handleEditPlaylist(ActionEvent event)
+    {
+        Playlist p = tableViewPlaylists.getSelectionModel().getSelectedItem(); //variabel der gemmer den playliste der er markeret
+        if (p != null) { //tjek at der er en markeret playliste
+            redigerPlaylistLinje(p); //kalder redigerings vinduet
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please choose a Playlist to edit!");
+            alert.showAndWait();
+        }
     }
 
     @FXML
-    void handleEditSong(ActionEvent event) {
-
+    void handleEditSong(ActionEvent event)
+    {
+        Song s = tableViewSongs.getSelectionModel().getSelectedItem(); //variabel der gemmer den sang der er markeret
+        if (s != null) { //tjek at der er en markeret sang
+            redigerSangLinje(s); //kalder redigerings vinduet
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please choose a Song to edit!");
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -307,6 +322,82 @@ public class MyTunesController {
     @FXML
     void handleSkipSong(ActionEvent event) {
 
+    }
+
+    //Metode til at redigere en Playliste ved at åbne modalt dialogvindue med data i
+    private void redigerPlaylistLinje(Playlist p) {
+        // Lav vinduet som en dialog med 3 tekstfelter med data
+        Dialog<ButtonType> dialogvindue = new Dialog();
+        dialogvindue.setTitle("Edit Playlist");
+        dialogvindue.setHeaderText("Edit Playlist");
+        dialogvindue.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField name = new TextField();
+        name.setPromptText("Enter name");
+        TextField songs = new TextField();
+        songs.setPromptText("Enter number of songs");
+        TextField time = new TextField();
+        time.setPromptText("Enter time");
+
+        VBox box = new VBox(10, name, songs, time); //10 pixels mellemrum mellem hver tekst felt
+        dialogvindue.getDialogPane().setContent(box);
+
+        //Sæt data i felterne fra playliste-objektet
+        name.setText(p.getName());
+        songs.setText(p.getSongs());
+        time.setText(p.getTime());
+
+        //Her afsluttes dialogen med at man kan trykke på OK
+        Optional<ButtonType> knap = dialogvindue.showAndWait();
+
+        // Hvis man trykker OK gemmes data fra felterne og tabellen opdateres
+        if (knap.isPresent() && knap.get() == ButtonType.OK) {
+            p.setName(name.getText());
+            p.setSongs(songs.getText());
+            p.setTime(time.getText());
+            tableViewPlaylists.refresh();
+            //tableViewPlaylists.sort();
+        }
+    }
+
+    //Metode til at redigere en sang ved at åbne modalt dialogvindue med data i
+    private void redigerSangLinje(Song s) {
+        // Lav vinduet som en dialog med to tekstfelter med data
+        Dialog<ButtonType> dialogvindue = new Dialog();
+        dialogvindue.setTitle("Edit Song");
+        dialogvindue.setHeaderText("Please enter information about the song");
+        dialogvindue.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        TextField title = new TextField();
+        title.setPromptText("Enter title");
+        TextField artist = new TextField();
+        artist.setPromptText("Enter artist");
+        TextField category = new TextField();
+        category.setPromptText("Enter category");
+        TextField time = new TextField();
+        time.setPromptText("Enter time");
+
+        VBox box = new VBox(10, title, artist, category, time); //10 pixels mellemrum mellem hver tekst felt
+        dialogvindue.getDialogPane().setContent(box);
+
+        //Sæt data i felterne fra sang-objektet
+        title.setText(s.getTitle());
+        artist.setText(s.getArtist());
+        category.setText(s.getCategory());
+        time.setText(s.getTime());
+
+        //Her afsluttes dialogen med at man kan trykke på OK
+        Optional<ButtonType> knap = dialogvindue.showAndWait();
+
+        //Hvis man trykker OK gemmes data fra felterne og tabellen opdateres
+        if (knap.isPresent() && knap.get() == ButtonType.OK)
+        {
+            s.setTitle(title.getText());
+            s.setArtist(artist.getText());
+            s.setCategory(category.getText());
+            s.setTime(time.getText());
+            tableViewSongs.refresh();
+            //tableViewSongs.sort();
+            //listViewSongsOnPlaylist.refresh();
+        }
     }
 
     //metode der gemmer en liste af Playlist-objekter i filen playlists.txt
