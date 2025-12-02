@@ -63,7 +63,7 @@ public class MyTunesController {
     {
         //Kolonnerne sættes op med forbindelse til klassen Playlist med hver sit felt
         kolonneName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        kolonneSongs.setCellValueFactory(new PropertyValueFactory<>("song"));
+        kolonneSongs.setCellValueFactory(new PropertyValueFactory<>("songs"));
         kolonnePlaylistTime.setCellValueFactory(new PropertyValueFactory<>("time"));
 
         //Kolonnerne sættes op med forbindelse til klassen Song med hver sit felt
@@ -94,7 +94,7 @@ public class MyTunesController {
         dialog.setHeaderText("Enter information about the new playlist"); //overskrift
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        //Opretter tekstfelter til title, artist, category, time
+        //Opretter tekstfelter til title, song, time
         TextField titleFelt = new TextField();
         titleFelt.setPromptText("Name");
         TextField songFelt = new TextField();
@@ -103,7 +103,7 @@ public class MyTunesController {
         timeFelt.setPromptText("Time");
 
 
-        //opretter en VBox med 5 tekstfelter og med 10 pixels mellemrum
+        //opretter en VBox med 3 tekstfelter og med 10 pixels mellemrum
         VBox box = new VBox(10, titleFelt, songFelt, timeFelt);
         dialog.getDialogPane().setContent(box); //VBoxen sættes ind som indhold i dialogboksen
 
@@ -120,8 +120,6 @@ public class MyTunesController {
             tableViewPlaylists.refresh(); //tableView opdateres
             //tableViewSongs.sort();
         }
-
-
     }
 
     @FXML
