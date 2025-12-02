@@ -212,11 +212,16 @@ public class MyTunesController {
     @FXML
     void handleBackToPreviousSong(ActionEvent event) {
 
+        // Henter index på den sang der er valgt i TableView
         int index = tableViewSongs.getSelectionModel().getSelectedIndex();
 
-        // Hvis vi ikke er på første sang → vælg forrige
+        // Hvis vi ikke er på første sang - vælg forrige
         if (index > 0) {
+
+            // Vælg sangen før den nuværende
             tableViewSongs.getSelectionModel().select(index - 1);
+
+            // Scroll så den forrige sang bliver synlig i mp3 afspilleren
             tableViewSongs.scrollTo(index - 1);
         }
 
@@ -346,9 +351,16 @@ public class MyTunesController {
     @FXML
     void handleSkipSong(ActionEvent event) {
 
+        // Henter index på den sang der aktuelt er valgt i TableView
         int index = tableViewSongs.getSelectionModel().getSelectedIndex();
+
+        // Hvis vi IKKE er på den sidste sang i listen → vælg næste sang
         if (index < sange.size() - 1) {
+
+            // Vælg den næste sang i rækken
             tableViewSongs.getSelectionModel().select(index + 1);
+
+            // Scroll så den nye valgte sang bliver synlig i mp3 afspilleren
             tableViewSongs.scrollTo(index + 1);
         }
 
