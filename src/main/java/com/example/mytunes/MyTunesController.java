@@ -387,9 +387,6 @@ public class MyTunesController {
 
             mediaPlayer.play(); //afspiller sangen
 
-            //sætter lydstyrken på mediaplayeren til sliderens værdi
-            mediaPlayer.setVolume(volumenSlider.getValue());
-
             //når brugeren rykker på slideren ændres volumen
             volumenSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
                 mediaPlayer.setVolume(newValue.doubleValue() / 100);
