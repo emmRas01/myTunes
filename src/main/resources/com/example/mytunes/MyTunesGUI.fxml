@@ -119,7 +119,7 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Slider fx:id="volumenSlider" maxWidth="300.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+      <Slider fx:id="volumenSlider" maxWidth="300.0" showTickMarks="true" value="50.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
       <Label text="Volumen" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
    </children>
    <padding>

@@ -92,6 +92,9 @@ public class MyTunesController {
         tableViewPlaylists.setItems(playlister);
         tableViewSongs.setItems(sange);
         listViewSongsOnPlaylist.setItems(sangeIplayliste);
+
+        //når programmet starter sættes volumen slider til lydstyrke 50 ud af 100
+        volumenSlider.setValue(50);
     }
 
     @FXML
@@ -383,6 +386,14 @@ public class MyTunesController {
             currentlyPlayingSong.setText(valgtSang.getTitle());
 
             mediaPlayer.play(); //afspiller sangen
+
+            //sætter lydstyrken på mediaplayeren til sliderens værdi
+            mediaPlayer.setVolume(volumenSlider.getValue());
+
+            //når brugeren rykker på slideren ændres volumen
+            volumenSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+                mediaPlayer.setVolume(newValue.doubleValue() / 100);
+            });
 
         } catch (Exception e) { //hvis der sker fejl får brugeren besked
             currentlyPlayingSong.setText("Error playing song");
