@@ -280,7 +280,6 @@ public class MyTunesController {
 
     }
 
-
     @FXML
     void handleDeletePlaylist(ActionEvent event)
     {
@@ -370,6 +369,8 @@ public class MyTunesController {
 
                 sangeIplayliste.set(i, næsteSang); //den næste sang flyttes en plads op i listview
                 sangeIplayliste.set(i + 1, valgtSang); //den valgte sang flyttes en plads ned i listView
+
+                listViewSongsOnPlaylist.getSelectionModel().select(valgtSang); //sætter markeringen efter flyt
             }
         } catch (Exception e) {
             System.out.println("The song is already at the bottom: " + e.getMessage());
@@ -388,6 +389,8 @@ public class MyTunesController {
 
                 sangeIplayliste.set(i, næsteSang); //den næste sang flyttes en plads ned i listview
                 sangeIplayliste.set(i - 1, valgtSang); //den valgte sang flyttes en plads op i listView
+
+                listViewSongsOnPlaylist.getSelectionModel().select(valgtSang); //sætter markeringen efter flyt
             }
         } catch (Exception e) {
             System.out.println("The song is already at the top: " + e.getMessage());
