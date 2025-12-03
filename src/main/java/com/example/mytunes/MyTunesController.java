@@ -360,7 +360,12 @@ public class MyTunesController {
 
     @FXML
     void handleMoveSongDown(ActionEvent event) {
+        Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
 
+        if (valgtSang != null) //hvis brugeren har markeret en sang
+        {
+
+        }
     }
 
     @FXML

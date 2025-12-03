@@ -6,7 +6,7 @@ public class Song implements Serializable //denne klasse skal kunne gemmes på e
 {
     private static final long serialVersionUID = 1L; //id til serialisering skal være unikt for hver klasse
 
-    //Definition af title, artist, category, time
+    //Definition af title, artist, category, time, musicFile
     private String title;
     private String artist;
     private String category;
@@ -58,16 +58,17 @@ public class Song implements Serializable //denne klasse skal kunne gemmes på e
     {
         return time;
     }
+
     public void setTime(String tm)
     {
         time = tm;
     }
 
+    //Getter metode til at hente musik filen når den skal afspilles
     public String getMusicFile()
     {
         return musicFile;
     }
-
 
     //Udseende på udskrift i vores listView i midten
     @Override
@@ -75,5 +76,4 @@ public class Song implements Serializable //denne klasse skal kunne gemmes på e
     {
         return title + "   " + artist + "   " + category + "   " + time;
     }
-
 }

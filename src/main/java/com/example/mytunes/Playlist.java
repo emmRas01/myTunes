@@ -12,7 +12,7 @@ public class Playlist implements Serializable //denne klasse skal kunne gemmes p
     private String song;
     private String time;
 
-    //Array-liste til at gemme en eller flere vare-objekter i en ordre
+    //Array-liste til at gemme en eller flere sang-objekter i en playliste
     private ArrayList<Song> songs = new ArrayList<>();
 
     //konstruktør
