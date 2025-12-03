@@ -93,8 +93,18 @@ public class MyTunesController {
         tableViewSongs.setItems(sange);
         listViewSongsOnPlaylist.setItems(sangeIplayliste);
 
-        //når programmet starter sættes volumen slider til lydstyrke 50 ud af 100
+        //når programmet starter sættes volumenSlider til lydstyrke 50 ud af 100
         volumenSlider.setValue(50);
+
+        //sortering af playliste navne i alfabetisk rækkefølge
+        kolonneName.setSortType(TableColumn.SortType.ASCENDING); //stigende rækkefølge fra A-Z
+        tableViewPlaylists.getSortOrder().add(kolonneName); //tilføjer kolonnen, så den kan sorteres
+        tableViewPlaylists.sort(); //udfører sorteringen i TableViewet
+
+        //sortering af sang navne i alfabetisk rækkefølge
+        kolonneTitle.setSortType(TableColumn.SortType.ASCENDING); //stigende rækkefølge fra A-Z
+        tableViewSongs.getSortOrder().add(kolonneTitle); //tilføjer kolonnen, så den kan sorteres
+        tableViewSongs.sort(); //udfører sorteringen i TableViewet
     }
 
     @FXML
@@ -129,7 +139,7 @@ public class MyTunesController {
             Playlist nyPlaylist = new Playlist(name, song, time); //opretter det nye sang objekt
             playlister.add(nyPlaylist); //den nye sang tilføjes til vores ObservableList sange
             tableViewPlaylists.refresh(); //tableView opdateres
-            //tableViewSongs.sort();
+            tableViewPlaylists.sort();
         }
     }
 
@@ -189,7 +199,7 @@ public class MyTunesController {
             Song nySang = new Song(title, artist, category, time, musicFile); //opretter det nye sang objekt
             sange.add(nySang); //den nye sang tilføjes til vores ObservableList sange
             tableViewSongs.refresh(); //tableView opdateres
-            //tableViewSongs.sort();
+            tableViewSongs.sort();
         }
     }
 
@@ -455,7 +465,7 @@ public class MyTunesController {
             p.setSongs(songs.getText());
             p.setTime(time.getText());
             tableViewPlaylists.refresh();
-            //tableViewPlaylists.sort();
+            tableViewPlaylists.sort();
         }
     }
 
@@ -495,8 +505,8 @@ public class MyTunesController {
             s.setCategory(category.getText());
             s.setTime(time.getText());
             tableViewSongs.refresh();
-            //tableViewSongs.sort();
-            //listViewSongsOnPlaylist.refresh();
+            tableViewSongs.sort();
+            listViewSongsOnPlaylist.refresh();
         }
     }
 
