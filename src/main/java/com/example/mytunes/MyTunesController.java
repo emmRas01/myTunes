@@ -85,7 +85,7 @@ public class MyTunesController {
             playlister = læsPlaylistObjekter();
             sange = læsSangObjekter();
         }  catch (Exception e) {
-            System.out.println("Kunne ikke indlæse filen: " + e.getMessage());
+            System.out.println("Could not read the file: " + e.getMessage());
         }
 
         //i vores TableViews og ListView indsættes objekterne fra vores ObservableLister (playlister, sange og sangeIplayliste)
@@ -360,29 +360,37 @@ public class MyTunesController {
 
     @FXML
     void handleMoveSongDown(ActionEvent event) {
-        Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
+        try {
+            Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
 
-        if (valgtSang != null) //hvis brugeren har markeret en sang
-        {
-            int i = sangeIplayliste.indexOf(valgtSang); //henter den plads/index som sangen står på
-            Song næsteSang = sangeIplayliste.get(i + 1);
+            if (valgtSang != null) //hvis brugeren har markeret en sang
+            {
+                int i = sangeIplayliste.indexOf(valgtSang); //henter den plads/index som sangen står på
+                Song næsteSang = sangeIplayliste.get(i + 1);
 
-            sangeIplayliste.set(i, næsteSang); //den næste sang flyttes en plads op i listview
-            sangeIplayliste.set(i + 1, valgtSang); //den valgte sang flyttes en plads ned i listView
+                sangeIplayliste.set(i, næsteSang); //den næste sang flyttes en plads op i listview
+                sangeIplayliste.set(i + 1, valgtSang); //den valgte sang flyttes en plads ned i listView
+            }
+        } catch (Exception e) {
+            System.out.println("The song is already at the bottom: " + e.getMessage());
         }
     }
 
     @FXML
     void handleMoveSongUp(ActionEvent event) {
-        Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
+        try {
+            Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
 
-        if (valgtSang != null) //hvis brugeren har markeret en sang
-        {
-            int i = sangeIplayliste.indexOf(valgtSang); //henter den plads/index som sangen står på
-            Song næsteSang = sangeIplayliste.get(i - 1);
+            if (valgtSang != null) //hvis brugeren har markeret en sang
+            {
+                int i = sangeIplayliste.indexOf(valgtSang); //henter den plads/index som sangen står på
+                Song næsteSang = sangeIplayliste.get(i - 1);
 
-            sangeIplayliste.set(i, næsteSang); //den næste sang flyttes en plads ned i listview
-            sangeIplayliste.set(i - 1, valgtSang); //den valgte sang flyttes en plads op i listView
+                sangeIplayliste.set(i, næsteSang); //den næste sang flyttes en plads ned i listview
+                sangeIplayliste.set(i - 1, valgtSang); //den valgte sang flyttes en plads op i listView
+            }
+        } catch (Exception e) {
+            System.out.println("The song is already at the top: " + e.getMessage());
         }
     }
 
