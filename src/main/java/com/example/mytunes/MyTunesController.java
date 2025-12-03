@@ -203,7 +203,7 @@ public class MyTunesController {
         }
     }
 
-    //når brugeren klikker på knappen med en pilen (peger til siden) Tilføjes den markeret sang til den markerede playliste
+    //når brugeren klikker på knappen med en pilen tilføjes den markeret sang til den markerede playliste
     @FXML
     void handleAddSongToPlaylist(ActionEvent event)
     {
@@ -395,14 +395,9 @@ public class MyTunesController {
     }
 
     @FXML
-    protected void handlePlaySong(ActionEvent event)
+    void handlePlaySong(MouseEvent event)
     {
         Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
-
-        if (valgtSang == null) //hvis brugeren ikke har valgt en sang kommer der en advarsel op
-        {
-            System.out.println("Please choose a song to play");
-        }
 
         try
         {
@@ -427,8 +422,17 @@ public class MyTunesController {
                 mediaPlayer.setVolume(newValue.doubleValue() / 100);
             });
 
-        } catch (Exception e) { //hvis der sker fejl får brugeren besked
+        } catch (Exception e) { //hvis brugeren ikke har valgt en sang får man besked
             currentlyPlayingSong.setText("Please choose a song to play");
+        }
+    }
+
+    @FXML
+    void handlePauseSong(MouseEvent event)
+    {
+        if (mediaPlayer != null)
+        {
+            mediaPlayer.pause();
         }
     }
 
@@ -456,7 +460,6 @@ public class MyTunesController {
             // Scroll så den nye valgte sang bliver synlig i mp3 afspilleren
             tableViewSongs.scrollTo(index + 1);
         }
-
     }
 
     //Metode til at redigere en Playliste ved at åbne modalt dialogvindue med data i

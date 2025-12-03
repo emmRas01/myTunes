@@ -17,10 +17,11 @@
 
 <GridPane hgap="18.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1300.0" vgap="18.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mytunes.MyTunesController">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="599.0462646484375" minWidth="10.0" prefWidth="117.31112670898438" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="599.0462646484375" minWidth="10.0" prefWidth="82.70555114746094" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="669.9146423339844" minWidth="7.58331298828125" prefWidth="132.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="719.450927734375" minWidth="10.0" prefWidth="119.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="599.0462646484375" minWidth="10.0" prefWidth="94.5" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="599.0462646484375" minWidth="10.0" prefWidth="54.48414611816406" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="599.0462646484375" minWidth="10.0" prefWidth="53.494720458984375" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="669.9146423339844" minWidth="7.58331298828125" prefWidth="109.50527954101562" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="719.450927734375" minWidth="10.0" prefWidth="125.08499145507812" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="759.7675170898438" minWidth="10.0" prefWidth="233.67498779296875" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="474.6829833984375" minWidth="0.0" prefWidth="63.53082275390625" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="951.5" minWidth="10.0" prefWidth="410.46917724609375" />
@@ -34,14 +35,14 @@
       <RowConstraints maxHeight="65.0325927734375" minHeight="0.0" prefHeight="52.65557861328125" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <TableView fx:id="tableViewPlaylists" onKeyPressed="#tastOpNedPlaylists" onMouseClicked="#museklikPlaylists" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="3">
+      <TableView fx:id="tableViewPlaylists" onKeyPressed="#tastOpNedPlaylists" onMouseClicked="#museklikPlaylists" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="3">
         <columns>
           <TableColumn fx:id="kolonneName" prefWidth="228.5" text="Name" />
           <TableColumn fx:id="kolonneSongs" minWidth="0.0" prefWidth="58.0" text="Songs" />
             <TableColumn fx:id="kolonnePlaylistTime" prefWidth="77.5" text="Time" />
         </columns>
       </TableView>
-      <TableView fx:id="tableViewSongs" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="6" GridPane.rowIndex="3">
+      <TableView fx:id="tableViewSongs" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="7" GridPane.rowIndex="3">
         <columns>
           <TableColumn fx:id="kolonneTitle" prefWidth="132.5" text="Title" />
           <TableColumn fx:id="kolonneArtist" prefWidth="124.0" text="Artist" />
@@ -49,52 +50,52 @@
             <TableColumn fx:id="kolonneSongTime" prefWidth="70.0" text="Time" />
         </columns>
       </TableView>
-      <ListView fx:id="listViewSongsOnPlaylist" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-      <Button mnemonicParsing="false" onAction="#handleAddSongToPlaylist" text="⬅" GridPane.columnIndex="5" GridPane.rowIndex="3" GridPane.valignment="TOP">
+      <ListView fx:id="listViewSongsOnPlaylist" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+      <Button mnemonicParsing="false" onAction="#handleAddSongToPlaylist" text="⬅" GridPane.columnIndex="6" GridPane.rowIndex="3" GridPane.valignment="TOP">
          <font>
             <Font size="31.0" />
          </font>
       </Button>
       <Button mnemonicParsing="false" onAction="#handleAddNewPlaylist" text="Add new playlist" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
       <Button mnemonicParsing="false" onAction="#handleEditPlaylist" text="Edit playlist" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
-      <Button mnemonicParsing="false" onAction="#handleDeletePlaylist" text="Delete playlist" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
-      <Button mnemonicParsing="false" onAction="#handleMoveSongDown" text="⬇" GridPane.columnIndex="3" GridPane.rowIndex="4">
+      <Button mnemonicParsing="false" onAction="#handleDeletePlaylist" text="Delete playlist" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+      <Button mnemonicParsing="false" onAction="#handleMoveSongDown" text="⬇" GridPane.columnIndex="4" GridPane.rowIndex="4">
          <font>
             <Font size="30.0" />
          </font>
       </Button>
-      <Button mnemonicParsing="false" onAction="#handleMoveSongUp" text="⬆" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+      <Button mnemonicParsing="false" onAction="#handleMoveSongUp" text="⬆" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
          <font>
             <Font size="30.0" />
          </font>
       </Button>
-      <Button mnemonicParsing="false" onAction="#handleDeleteSongFromPlaylist" text="Delete song from Playlist" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-      <Button mnemonicParsing="false" onAction="#handleAddNewSong" text="Add new song" GridPane.columnIndex="6" GridPane.rowIndex="4" />
-      <Button mnemonicParsing="false" onAction="#handleEditSong" text="Edit song" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
-      <Button mnemonicParsing="false" onAction="#handleDeleteSong" text="Delete song" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-      <TextField fx:id="searchField" prefHeight="26.0" prefWidth="457.0" GridPane.columnIndex="6" GridPane.valignment="BOTTOM" />
-      <Label text="Filter:" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
+      <Button mnemonicParsing="false" onAction="#handleDeleteSongFromPlaylist" text="Delete song from Playlist" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+      <Button mnemonicParsing="false" onAction="#handleAddNewSong" text="Add new song" GridPane.columnIndex="7" GridPane.rowIndex="4" />
+      <Button mnemonicParsing="false" onAction="#handleEditSong" text="Edit song" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+      <Button mnemonicParsing="false" onAction="#handleDeleteSong" text="Delete song" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+      <TextField fx:id="searchField" prefHeight="26.0" prefWidth="457.0" GridPane.columnIndex="7" GridPane.valignment="BOTTOM" />
+      <Label text="Filter:" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <Button mnemonicParsing="false" onAction="#handleSearch" text="Search" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+      <Button mnemonicParsing="false" onAction="#handleSearch" text="Search" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP" />
       <Label text="Playlists" GridPane.rowIndex="2">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
       </Label>
-      <Label text="Songs on Playlist" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="2">
+      <Label text="Songs on Playlist" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="2">
          <font>
             <Font name="System Bold Italic" size="20.0" />
          </font>
       </Label>
-      <Label text="Songs" GridPane.columnIndex="6" GridPane.rowIndex="2">
+      <Label text="Songs" GridPane.columnIndex="7" GridPane.rowIndex="2">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
       </Label>
-      <Label fx:id="currentlyPlayingSong" opacity="0.5" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+      <Label fx:id="currentlyPlayingSong" opacity="0.5" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
       <Button mnemonicParsing="false" onAction="#handleBackToPreviousSong" prefHeight="35.0" prefWidth="38.0" GridPane.halignment="RIGHT">
          <graphic>
             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
@@ -103,7 +104,7 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Button mnemonicParsing="false" onAction="#handlePlaySong" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+      <Button mnemonicParsing="false" onMouseClicked="#handlePlaySong" GridPane.columnIndex="1" GridPane.halignment="CENTER">
          <graphic>
             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -111,7 +112,7 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Button mnemonicParsing="false" onAction="#handleSkipSong" GridPane.columnIndex="2" GridPane.halignment="LEFT">
+      <Button mnemonicParsing="false" onAction="#handleSkipSong" GridPane.columnIndex="3" GridPane.halignment="LEFT">
          <graphic>
             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -119,8 +120,17 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Slider fx:id="volumenSlider" maxWidth="300.0" showTickMarks="true" value="50.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-      <Label text="Volumen" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
+      <Slider fx:id="volumenSlider" maxWidth="300.0" showTickMarks="true" value="50.0" GridPane.columnSpan="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+      <Label text="Volumen" GridPane.columnSpan="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
+      <Button mnemonicParsing="false" onMouseClicked="#handlePauseSong" GridPane.columnIndex="2">
+         <graphic>
+            <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@pause-button.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
    <padding>
       <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
