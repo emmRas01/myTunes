@@ -422,8 +422,8 @@ public class MyTunesController {
                 mediaPlayer.setVolume(newValue.doubleValue() / 100);
             });
 
-        } catch (Exception e) { //hvis brugeren ikke har valgt en sang får man besked
-            currentlyPlayingSong.setText("Please choose a song to play");
+        } catch (Exception e) { //hvis der sker en fejl i afspilningen, så får brugeren besked
+            currentlyPlayingSong.setText("Error playing song");
         }
     }
 
