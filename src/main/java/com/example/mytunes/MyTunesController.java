@@ -401,8 +401,7 @@ public class MyTunesController {
 
         if (valgtSang == null) //hvis brugeren ikke har valgt en sang kommer der en advarsel op
         {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Please choose a Song to Play!");
-            alert.showAndWait();
+            System.out.println("Please choose a song to play");
         }
 
         try
@@ -429,7 +428,7 @@ public class MyTunesController {
             });
 
         } catch (Exception e) { //hvis der sker fejl får brugeren besked
-            currentlyPlayingSong.setText("Error playing song");
+            currentlyPlayingSong.setText("Please choose a song to play");
         }
     }
 
