@@ -15,15 +15,15 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane hgap="18.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1300.0" vgap="18.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mytunes.MyTunesController">
+<GridPane hgap="18.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1400.0" vgap="18.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mytunes.MyTunesController">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="599.0462646484375" minWidth="10.0" prefWidth="94.5" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="599.0462646484375" minWidth="10.0" prefWidth="54.48414611816406" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="599.0462646484375" minWidth="10.0" prefWidth="53.494720458984375" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="669.9146423339844" minWidth="7.58331298828125" prefWidth="109.50527954101562" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="719.450927734375" minWidth="10.0" prefWidth="125.08499145507812" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="759.7675170898438" minWidth="10.0" prefWidth="233.67498779296875" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="474.6829833984375" minWidth="0.0" prefWidth="63.53082275390625" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="599.0462646484375" minWidth="10.0" prefWidth="110.74391174316406" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="599.0462646484375" minWidth="10.0" prefWidth="46.329254150390625" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="599.0462646484375" minWidth="10.0" prefWidth="52.121978759765625" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="669.9146423339844" minWidth="7.58331298828125" prefWidth="101.87802124023438" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="719.450927734375" minWidth="10.0" prefWidth="115.91461181640625" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="759.7675170898438" minWidth="10.0" prefWidth="225.54339599609375" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="474.6829833984375" minWidth="0.0" prefWidth="63.6759033203125" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="951.5" minWidth="10.0" prefWidth="410.46917724609375" />
   </columnConstraints>
   <rowConstraints>
@@ -32,7 +32,6 @@
       <RowConstraints maxHeight="204.0" minHeight="0.0" prefHeight="6.0" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="745.4693450927734" minHeight="10.0" prefHeight="499.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="106.0" minHeight="10.0" prefHeight="31.34442138671875" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="65.0325927734375" minHeight="0.0" prefHeight="52.65557861328125" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
       <TableView fx:id="tableViewPlaylists" onKeyPressed="#tastOpNedPlaylists" onMouseClicked="#museklikPlaylists" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="3">
@@ -56,8 +55,8 @@
             <Font size="31.0" />
          </font>
       </Button>
-      <Button mnemonicParsing="false" onAction="#handleAddNewPlaylist" text="Add new playlist" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
-      <Button mnemonicParsing="false" onAction="#handleEditPlaylist" text="Edit playlist" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+      <Button mnemonicParsing="false" onAction="#handleAddNewPlaylist" text="Add new playlist" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
+      <Button mnemonicParsing="false" onAction="#handleEditPlaylist" prefHeight="26.0" prefWidth="87.0" text="Edit playlist" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
       <Button mnemonicParsing="false" onAction="#handleDeletePlaylist" text="Delete playlist" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
       <Button mnemonicParsing="false" onAction="#handleMoveSongDown" text="⬇" GridPane.columnIndex="4" GridPane.rowIndex="4">
          <font>
@@ -112,7 +111,7 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Button mnemonicParsing="false" onAction="#handleSkipSong" GridPane.columnIndex="3" GridPane.halignment="LEFT">
+      <Button mnemonicParsing="false" onAction="#handleSkipSong" prefWidth="57.0" GridPane.columnIndex="3" GridPane.halignment="LEFT">
          <graphic>
             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -133,6 +132,6 @@
       </Button>
    </children>
    <padding>
-      <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
+      <Insets bottom="75.0" left="75.0" right="75.0" top="75.0" />
    </padding>
 </GridPane>
