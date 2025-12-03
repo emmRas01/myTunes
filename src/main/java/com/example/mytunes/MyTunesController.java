@@ -364,13 +364,26 @@ public class MyTunesController {
 
         if (valgtSang != null) //hvis brugeren har markeret en sang
         {
+            int i = sangeIplayliste.indexOf(valgtSang); //henter den plads/index som sangen står på
+            Song næsteSang = sangeIplayliste.get(i + 1);
 
+            sangeIplayliste.set(i, næsteSang); //den næste sang flyttes en plads op i listview
+            sangeIplayliste.set(i + 1, valgtSang); //den valgte sang flyttes en plads ned i listView
         }
     }
 
     @FXML
     void handleMoveSongUp(ActionEvent event) {
+        Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
 
+        if (valgtSang != null) //hvis brugeren har markeret en sang
+        {
+            int i = sangeIplayliste.indexOf(valgtSang); //henter den plads/index som sangen står på
+            Song næsteSang = sangeIplayliste.get(i - 1);
+
+            sangeIplayliste.set(i, næsteSang); //den næste sang flyttes en plads ned i listview
+            sangeIplayliste.set(i - 1, valgtSang); //den valgte sang flyttes en plads op i listView
+        }
     }
 
     @FXML
