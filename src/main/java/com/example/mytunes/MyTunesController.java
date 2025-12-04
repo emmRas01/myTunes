@@ -67,6 +67,9 @@ public class MyTunesController {
     //media objekt sættes op her, så den ikke bliver fjernet af garbage collectoren
     private static MediaPlayer mediaPlayer;
 
+    //variabel til at indholde hvilken sang der spilles lige nu
+    private Song currentSong;
+
     public void initialize() //køres når programmet starter
     {
         //Kolonnerne sættes op med forbindelse til klassen Playlist med hver sit felt
@@ -95,6 +98,11 @@ public class MyTunesController {
 
         //når programmet starter sættes volumenSlider til lydstyrke 50 ud af 100
         volumenSlider.setValue(50);
+
+        //når brugeren rykker på slideren ændres volumen
+        volumenSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            mediaPlayer.setVolume(newValue.doubleValue() / 100);
+        });
 
         //sortering af playliste navne i alfabetisk rækkefølge
         kolonneName.setSortType(TableColumn.SortType.ASCENDING); //stigende rækkefølge fra A-Z
@@ -400,33 +408,38 @@ public class MyTunesController {
     @FXML
     void handlePlaySong(MouseEvent event)
     {
-        Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
-
         try
         {
+            Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
+
             String filSti = new File(valgtSang.getMusicFile()).toURI().toString(); //henter fil-stien til sangen via getMusicFile()
 
-            if (mediaPlayer != null) //hvis der i forvejen afspilles musik, stoppes den inden den nye valgte sang afspilles
+            if (mediaPlayer == null || !valgtSang.equals(currentSong)) //hvis der ikke er oprettet en mediaPlayer eller hvis brugeren har valgt en ny sang
             {
-                mediaPlayer.stop();
+                if (mediaPlayer != null) //hvis der i forvejen afspilles musik, stoppes den inden den nye valgte sang afspilles
+                {
+                    mediaPlayer.stop();
+                }
+
+                //opretter et Medie/musikfilen, opretter Medieplayer med mediet indeni
+                Media media = new Media(filSti);
+                mediaPlayer = new MediaPlayer(media);
+
+                currentSong = valgtSang; //gemmer den valgte sang som currentSong
+
+                mediaPlayer.play(); //afspiller sangen
+
+                //udskriver hvilken sang der afspilles, så brugeren kan se det
+                currentlyPlayingSong.setText(valgtSang.getTitle());
+
+            }
+            else //hvis brugeren ikke har valgt en ny sang -> genoptages sangafspilningen bare efter den har været på pause
+            {
+                mediaPlayer.play();
             }
 
-            //opretter Medie med den markerede sang og Medieplayer med mediet
-            Media media = new Media(filSti);
-            mediaPlayer = new MediaPlayer(media);
-
-            //udskriver hvilken sang der afspilles, så brugeren kan se det
-            currentlyPlayingSong.setText(valgtSang.getTitle());
-
-            mediaPlayer.play(); //afspiller sangen
-
-            //når brugeren rykker på slideren ændres volumen
-            volumenSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-                mediaPlayer.setVolume(newValue.doubleValue() / 100);
-            });
-
         } catch (Exception e) { //hvis der sker en fejl i afspilningen, så får brugeren besked
-            currentlyPlayingSong.setText("Error playing song");
+            currentlyPlayingSong.setText("Please select a song to play!");
         }
     }
 
