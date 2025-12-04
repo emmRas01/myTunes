@@ -184,7 +184,11 @@ public class MyTunesController {
         File valgtFil = fileChooser.showOpenDialog(dialog.getDialogPane().getScene().getWindow());
             if (valgtFil != null) //hvis der er valgt en fil, så sættes tekstfeltet til den valgte fil
             {
-                fileChooserFelt.setText(valgtFil.getAbsolutePath());
+                String fullPath = valgtFil.getAbsolutePath();
+                String fileName = valgtFil.getName();
+
+                fileChooserFelt.setText(fileName);                   // vis kun filnavn til brugeren
+                fileChooserFelt.setUserData(fullPath);
             }
         });
 
@@ -568,8 +572,30 @@ public class MyTunesController {
         category.setPromptText("Enter category");
         TextField time = new TextField();
         time.setPromptText("Enter time");
+        TextField fileField = new TextField();
+        fileField.setPromptText("Enter file name");
+        fileField.setEditable(false);
 
-        VBox box = new VBox(10, title, artist, category, time); //10 pixels mellemrum mellem hver tekst felt
+        //Opretter en file chooser knap
+        Button selectFileButton = new Button("Select File");
+
+        //sætter action på knappen til file chooser
+        selectFileButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Select a File");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Music File", "*.mp3", "*.wav"));
+            File valgtFil = fileChooser.showOpenDialog(dialogvindue.getDialogPane().getScene().getWindow());
+            if (valgtFil != null) //hvis der er valgt en fil, så sættes tekstfeltet til den valgte fil
+            {
+                String fullPath = valgtFil.getAbsolutePath();
+                String fileName = valgtFil.getName();
+
+                fileField.setText(fileName);  // vis kun filnavn til brugeren
+                fileField.setUserData(fullPath);
+            }
+        });
+
+        VBox box = new VBox(10, title, artist, category, time, fileField, selectFileButton); //10 pixels mellemrum mellem hver tekst felt
         dialogvindue.getDialogPane().setContent(box);
 
         //Sæt data i felterne fra sang-objektet
@@ -577,6 +603,7 @@ public class MyTunesController {
         artist.setText(s.getArtist());
         category.setText(s.getCategory());
         time.setText(s.getTime());
+        fileField.setText(s.getMusicFile());
 
         //Her afsluttes dialogen med at man kan trykke på OK
         Optional<ButtonType> knap = dialogvindue.showAndWait();
@@ -588,6 +615,7 @@ public class MyTunesController {
             s.setArtist(artist.getText());
             s.setCategory(category.getText());
             s.setTime(time.getText());
+            s.setMusicFile(fileField.getText());
             tableViewSongs.refresh();
             tableViewSongs.sort();
             listViewSongsOnPlaylist.refresh();

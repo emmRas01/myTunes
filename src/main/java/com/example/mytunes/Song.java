@@ -76,4 +76,7 @@ public class Song implements Serializable //denne klasse skal kunne gemmes på e
     {
         return title + "   " + artist + "   " + category + "   " + time;
     }
+
+    public void setMusicFile(String text) {
+    }
 }
