@@ -414,6 +414,7 @@ public class MyTunesController {
         }
     }
 
+    //metode til at afspille musik
     public void playSong(Song valgtSang)
     {
         try
@@ -475,12 +476,35 @@ public class MyTunesController {
         }
     }
 
+    //metode til søge-knappen
     @FXML
     void handleSearch(ActionEvent event) {
         String searchTerm = searchField.getText().toLowerCase();
         ObservableList<Song> filteredSongs = sange.filtered(song ->
                 song.getTitle().toLowerCase().contains(searchTerm)
         );
+        tableViewSongs.setItems(filteredSongs);
+    }
+
+    //metode til at søge på sange imens man taster søgeordet
+    @FXML
+    void handleSearchTextField(KeyEvent event)
+    {
+        //henter teksten fra søgefeltet
+        String søgeOrd = searchField.getText();
+
+        //opret en ny tom observable list til de filtrerede sange
+        ObservableList<Song> filteredSongs= FXCollections.observableArrayList();
+
+        //for-løkke der gennemgår alle sangene
+        for (Song song : sange) {
+            //hvis kontaktens navn indeholder søgeteksten -> tilføj den til den filtrerede liste
+            if (song.getTitle().toLowerCase().contains(søgeOrd)) {
+                filteredSongs.add(song);
+            }
+        }
+
+        //opdater ListView med den filtrerede liste
         tableViewSongs.setItems(filteredSongs);
     }
 
