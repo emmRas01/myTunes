@@ -421,7 +421,7 @@ public class MyTunesController {
         {
             String filSti = new File(valgtSang.getMusicFile()).toURI().toString(); //henter fil-stien til sangen via getMusicFile()
 
-            if (mediaPlayer == null || !valgtSang.equals(currentSong)) //hvis der ikke er oprettet en mediaPlayer eller hvis brugeren har valgt en ny sang
+            if (mediaPlayer == null || !valgtSang.equals(currentSong))
             {
                 if (mediaPlayer != null) //hvis der i forvejen afspilles musik, stoppes den inden den nye valgte sang afspilles
                 {
@@ -438,32 +438,25 @@ public class MyTunesController {
 
                 //udskriver hvilken sang der afspilles, så brugeren kan se det
                 currentlyPlayingSong.setText(valgtSang.getTitle());
-
-            }
-            else //hvis brugeren ikke har valgt en ny sang -> genoptages sangafspilningen bare efter den har været på pause
-            {
+            } else { //hvis brugeren ikke har valgt en ny sang -> genoptages sangafspilningen bare efter den har været på pause
                 mediaPlayer.play();
             }
 
         } catch (Exception e) { //hvis der sker en fejl i afspilningen, så får brugeren besked
-            currentlyPlayingSong.setText("Please select a song to play!");
+            currentlyPlayingSong.setText("Error: " + e.getMessage());
         }
-
     }
 
     @FXML
     void handlePlaySong(MouseEvent event)
     {
-        //henter den sang som brugeren har valgt i tableView(listen med alle sange)
-        Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem();
-
+        Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem(); //henter sangen som brugeren har markeret i tableview
         //Hvis der ikke er valgt en sang i tableView(listen med alle sange), så tjekkes der om
         //brugeren har valgt en sang i listViewet(listen med sange tilhørende en playliste):
         if (valgtSang == null)
         {
             valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem();
         }
-
         playSong(valgtSang); //den valgte sang afspilles - enten fra den ene eller anden liste
     }
 
