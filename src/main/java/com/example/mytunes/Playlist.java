@@ -35,6 +35,12 @@ public class Playlist implements Serializable //denne klasse skal kunne gemmes p
         return songs;
     }
 
+    //Setter-metode der opdatere hele Arraylisten med en ny liste af sange der tilhøre en playliste
+    public void setSongsList(ArrayList<Song> songList)
+    {
+        songs = songList;
+    }
+
     //Der skal være get-metoder og set-metoder for at tableview Playlist både kan hente data og indsætte ny data
     public String getName()
     {

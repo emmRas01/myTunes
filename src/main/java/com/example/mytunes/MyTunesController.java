@@ -16,6 +16,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class MyTunesController {
@@ -369,6 +370,7 @@ public class MyTunesController {
     void handleMoveSongDown(ActionEvent event) {
         try {
             Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
+            Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem(); //henter den playliste som sangen hører under
 
             if (valgtSang != null) //hvis brugeren har markeret en sang
             {
@@ -379,6 +381,9 @@ public class MyTunesController {
                 sangeIplayliste.set(i + 1, valgtSang); //den valgte sang flyttes en plads ned i listView
 
                 listViewSongsOnPlaylist.getSelectionModel().select(valgtSang); //sætter markeringen efter flyt
+
+                //den nye rækkefølge af sange gemmes
+                valgtPlayliste.setSongsList(new ArrayList<>(sangeIplayliste));
             }
         } catch (Exception e) {
             System.out.println("The song is already at the bottom: " + e.getMessage());
@@ -389,6 +394,7 @@ public class MyTunesController {
     void handleMoveSongUp(ActionEvent event) {
         try {
             Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
+            Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem(); //henter den playliste som sangen hører under
 
             if (valgtSang != null) //hvis brugeren har markeret en sang
             {
@@ -399,6 +405,9 @@ public class MyTunesController {
                 sangeIplayliste.set(i - 1, valgtSang); //den valgte sang flyttes en plads op i listView
 
                 listViewSongsOnPlaylist.getSelectionModel().select(valgtSang); //sætter markeringen efter flyt
+
+                //den nye rækkefølge af sange gemmes
+                valgtPlayliste.setSongsList(new ArrayList<>(sangeIplayliste));
             }
         } catch (Exception e) {
             System.out.println("The song is already at the top: " + e.getMessage());
