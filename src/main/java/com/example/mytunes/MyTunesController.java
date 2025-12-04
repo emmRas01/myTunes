@@ -414,13 +414,10 @@ public class MyTunesController {
         }
     }
 
-    @FXML
-    void handlePlaySong(MouseEvent event)
+    public void playSong(Song valgtSang)
     {
         try
         {
-            Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
-
             String filSti = new File(valgtSang.getMusicFile()).toURI().toString(); //henter fil-stien til sangen via getMusicFile()
 
             if (mediaPlayer == null || !valgtSang.equals(currentSong)) //hvis der ikke er oprettet en mediaPlayer eller hvis brugeren har valgt en ny sang
@@ -450,6 +447,23 @@ public class MyTunesController {
         } catch (Exception e) { //hvis der sker en fejl i afspilningen, så får brugeren besked
             currentlyPlayingSong.setText("Please select a song to play!");
         }
+
+    }
+
+    @FXML
+    void handlePlaySong(MouseEvent event)
+    {
+        //henter den sang som brugeren har valgt i tableView(listen med alle sange)
+        Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem();
+
+        //Hvis der ikke er valgt en sang i tableView(listen med alle sange), så tjekkes der om
+        //brugeren har valgt en sang i listViewet(listen med sange tilhørende en playliste):
+        if (valgtSang == null)
+        {
+            valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem();
+        }
+
+        playSong(valgtSang); //den valgte sang afspilles - enten fra den ene eller anden liste
     }
 
     @FXML
