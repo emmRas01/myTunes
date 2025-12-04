@@ -155,7 +155,6 @@ public class MyTunesController {
     @FXML
     void handleAddNewSong(ActionEvent event)
     {
-
         Dialog<ButtonType> dialog = new Dialog<>(); //Opretter en ny dialogboks, hvor knapperne (OK/Cancel) er typen ButtonType
         dialog.setTitle("Add new song"); //titlen i vinduet
         dialog.setHeaderText("Enter information about the new song"); //overskrift
@@ -299,15 +298,30 @@ public class MyTunesController {
 
         if (valgtPlayliste != null) //hvis brugeren har markeret en playliste
         {
-            playlister.remove(valgtPlayliste); //fjernes den fra playlist listen (ObservableList Playlister)
-            sangeIplayliste.clear(); //clear listView'et
+            //opretter et vindue hvor brugeren kan bekræfte at den skulle slettes
+            Alert erDuSikkerAlarm = new Alert(Alert.AlertType.CONFIRMATION);
+            erDuSikkerAlarm.setTitle("Delete Playlist");
+            erDuSikkerAlarm.setHeaderText("Are you sure?");
+            erDuSikkerAlarm.setContentText("Are you sure you want to delete this playlist?");
+
+            Optional<ButtonType> beslutning = erDuSikkerAlarm.showAndWait(); //venter på at brugeren klikker ok
+
+            if (beslutning.isPresent() && beslutning.get() == ButtonType.OK) //hvis brugeren klikker ok
+            {
+                playlister.remove(valgtPlayliste); //fjernes den fra playlist listen (ObservableList Playlister)
+                sangeIplayliste.clear(); //clear listView'et
+            }
+
+            if (beslutning.isPresent() && beslutning.get() == ButtonType.CANCEL) //hvis brugeren klikker cancel
+            {
+                System.out.println("Nothing got deleted");
+            }
         }
         else //hvis brugeren ikke har markeret en ordre, så meldes der fejl
         {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Please choose a Playlist to Delete!");
             alert.showAndWait();
         }
-
     }
 
     @FXML
@@ -317,7 +331,23 @@ public class MyTunesController {
 
         if (valgtSang != null) //hvis brugeren har markeret en sang
         {
-            sange.remove(valgtSang); //fjernes denne sang fra sang listen (ObservableList sange)
+            //opretter et vindue hvor brugeren kan bekræfte at den skulle slettes
+            Alert erDuSikkerAlarm = new Alert(Alert.AlertType.CONFIRMATION);
+            erDuSikkerAlarm.setTitle("Delete Playlist");
+            erDuSikkerAlarm.setHeaderText("Are you sure?");
+            erDuSikkerAlarm.setContentText("Are you sure you want to delete this playlist?");
+
+            Optional<ButtonType> beslutning = erDuSikkerAlarm.showAndWait(); //venter på at brugeren klikker ok
+
+            if (beslutning.isPresent() && beslutning.get() == ButtonType.OK) //hvis brugeren klikker ok
+            {
+                sange.remove(valgtSang); //fjernes denne sang fra sang listen (ObservableList sange)
+            }
+
+            if (beslutning.isPresent() && beslutning.get() == ButtonType.CANCEL) //hvis brugeren klikker cancel
+            {
+                System.out.println("Nothing got deleted");
+            }
 
         } else { //hvis brugeren ikke har markeret en sang, så meldes der fejl
             Alert alert = new Alert(Alert.AlertType.WARNING, "Please choose a song to delete!");
@@ -330,13 +360,28 @@ public class MyTunesController {
         Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem();
         Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem();
 
-        if (valgtPlayliste != null && valgtSang != null) {
-            valgtPlayliste.getSongsList().remove(valgtSang);
+        if (valgtPlayliste != null && valgtSang != null)
+        {
+            //opretter et vindue hvor brugeren kan bekræfte at den skulle slettes
+            Alert erDuSikkerAlarm = new Alert(Alert.AlertType.CONFIRMATION);
+            erDuSikkerAlarm.setTitle("Delete Playlist");
+            erDuSikkerAlarm.setHeaderText("Are you sure?");
+            erDuSikkerAlarm.setContentText("Are you sure you want to delete this playlist?");
 
-            sangeIplayliste.setAll(valgtPlayliste.getSongsList());
+            Optional<ButtonType> beslutning = erDuSikkerAlarm.showAndWait(); //venter på at brugeren klikker ok
 
-            //sætter markøren til den sidste sang i listViewet -> så brugeren kan slette hele listen hurtigt ved behov
-            listViewSongsOnPlaylist.getSelectionModel().selectLast();
+            if (beslutning.isPresent() && beslutning.get() == ButtonType.OK) //hvis brugeren klikker ok
+            {
+                valgtPlayliste.getSongsList().remove(valgtSang);
+                sangeIplayliste.setAll(valgtPlayliste.getSongsList());
+                //sætter markøren til den sidste sang i listViewet -> så brugeren kan slette hele listen hurtigt ved behov
+                listViewSongsOnPlaylist.getSelectionModel().selectLast();
+            }
+
+            if (beslutning.isPresent() && beslutning.get() == ButtonType.CANCEL) //hvis brugeren klikker cancel
+            {
+                System.out.println("Nothing got deleted");
+            }
         }
         else //error hvis brugeren ikke har markeret både en playliste og en sang
         {
