@@ -155,6 +155,7 @@ public class MyTunesController {
     @FXML
     void handleAddNewSong(ActionEvent event)
     {
+
         Dialog<ButtonType> dialog = new Dialog<>(); //Opretter en ny dialogboks, hvor knapperne (OK/Cancel) er typen ButtonType
         dialog.setTitle("Add new song"); //titlen i vinduet
         dialog.setHeaderText("Enter information about the new song"); //overskrift
@@ -165,8 +166,9 @@ public class MyTunesController {
         titleFelt.setPromptText("Title");
         TextField artistFelt = new TextField();
         artistFelt.setPromptText("Artist");
-        TextField categoryFelt = new TextField();
-        categoryFelt.setPromptText("Category");
+        ComboBox<String> categoryBox = new ComboBox<>();
+        categoryBox.getItems().addAll("Rock", "Pop", "Julemusik", "Elektronisk", "Hip-Hop", "Klassisk");
+        categoryBox.setPromptText("Choose category");
         TextField timeFelt = new TextField();
         timeFelt.setPromptText("Time");
         TextField fileChooserFelt = new TextField();
@@ -181,7 +183,7 @@ public class MyTunesController {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select a File");
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Music File", "*.mp3", "*.wav"));
-        File valgtFil = fileChooser.showOpenDialog(dialog.getDialogPane().getScene().getWindow());
+            File valgtFil = fileChooser.showOpenDialog(dialog.getDialogPane().getScene().getWindow());
             if (valgtFil != null) //hvis der er valgt en fil, så sættes tekstfeltet til den valgte fil
             {
                 fileChooserFelt.setText(valgtFil.getAbsolutePath());
@@ -192,7 +194,7 @@ public class MyTunesController {
         HBox fileChoserBox = new HBox(10, fileChooserFelt, selectFileButton);
 
         //opretter en VBox med 5 tekstfelter og med 10 pixels mellemrum
-        VBox box = new VBox(10, titleFelt, artistFelt, categoryFelt, timeFelt, fileChooserFelt, fileChoserBox);
+        VBox box = new VBox(10, titleFelt, artistFelt, categoryBox, timeFelt, fileChooserFelt, fileChoserBox);
         dialog.getDialogPane().setContent(box); //VBoxen sættes ind som indhold i dialogboksen
 
         Optional<ButtonType> resultat = dialog.showAndWait(); //viser dialogen og stopper og venter på at brugeren klikker OK eller Cancel
@@ -201,7 +203,7 @@ public class MyTunesController {
         {
             String title = titleFelt.getText(); //henter den tekst brugeren har skrevet i felterne
             String artist = artistFelt.getText();
-            String category = categoryFelt.getText();
+            String category = categoryBox.getValue();
             String time = timeFelt.getText();
             String musicFile = fileChooserFelt.getText();
 
@@ -211,6 +213,7 @@ public class MyTunesController {
             tableViewSongs.sort();
         }
     }
+
 
     //når brugeren klikker på knappen med en pilen tilføjes den markeret sang til den markerede playliste
     @FXML
@@ -564,8 +567,8 @@ public class MyTunesController {
         title.setPromptText("Enter title");
         TextField artist = new TextField();
         artist.setPromptText("Enter artist");
-        TextField category = new TextField();
-        category.setPromptText("Enter category");
+        ComboBox<String> categoryBox = new ComboBox<>();
+        categoryBox.getItems().addAll("Rock", "Pop", "Julemusik", "Elektronisk", "Hip-Hop", "Klassisk");
         TextField time = new TextField();
         time.setPromptText("Enter time");
         TextField fileField = new TextField();
@@ -589,13 +592,13 @@ public class MyTunesController {
             }
         });
 
-        VBox box = new VBox(10, title, artist, category, time, fileField, selectFileButton); //10 pixels mellemrum mellem hver tekst felt
+        VBox box = new VBox(10, title, artist, categoryBox, time, fileField, selectFileButton); //10 pixels mellemrum mellem hver tekst felt
         dialogvindue.getDialogPane().setContent(box);
 
         //Sæt data i felterne fra sang-objektet
         title.setText(s.getTitle());
         artist.setText(s.getArtist());
-        category.setText(s.getCategory());
+        categoryBox.setValue(s.getCategory());
         time.setText(s.getTime());
         fileField.setText(s.getMusicFile());
 
@@ -607,7 +610,7 @@ public class MyTunesController {
         {
             s.setTitle(title.getText());
             s.setArtist(artist.getText());
-            s.setCategory(category.getText());
+            s.setCategory(categoryBox.getValue());
             s.setTime(time.getText());
             s.setMusicFile(s.getMusicFile());
             tableViewSongs.refresh();
