@@ -145,10 +145,17 @@ public class MyTunesController {
             String song = songFelt.getText();
             String time = timeFelt.getText();
 
-            Playlist nyPlaylist = new Playlist(name, song, time); //opretter det nye sang objekt
-            playlister.add(nyPlaylist); //den nye sang tilføjes til vores ObservableList sange
-            tableViewPlaylists.refresh(); //tableView opdateres
-            tableViewPlaylists.sort();
+            if (!name.isEmpty() && !song.isEmpty() && !time.isEmpty()) {
+                Playlist nyPlaylist = new Playlist(name, song, time); //opretter det nye sang objekt
+                playlister.add(nyPlaylist); //den nye sang tilføjes til vores ObservableList sange
+                tableViewPlaylists.refresh(); //tableView opdateres
+                tableViewPlaylists.sort();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Please fill out all fields.");
+                alert.show();
+            }
+
+
         }
     }
 
@@ -207,10 +214,17 @@ public class MyTunesController {
             String time = timeFelt.getText();
             String musicFile = fileChooserFelt.getText();
 
-            Song nySang = new Song(title, artist, category, time, musicFile); //opretter det nye sang objekt
-            sange.add(nySang); //den nye sang tilføjes til vores ObservableList sange
-            tableViewSongs.refresh(); //tableView opdateres
-            tableViewSongs.sort();
+            if (!title.isEmpty() && !artist.isEmpty() && !category.isEmpty() && !time.isEmpty() && !musicFile.isEmpty()) {
+                Song nySang = new Song(title, artist, category, time, musicFile); //opretter det nye sang objekt
+                sange.add(nySang); //den nye sang tilføjes til vores ObservableList sange
+                tableViewSongs.refresh(); //tableView opdateres
+                tableViewSongs.sort();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Please fill out all fields.");
+                alert.show();
+            }
+
+
         }
     }
 
