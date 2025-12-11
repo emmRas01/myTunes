@@ -154,8 +154,6 @@ public class MyTunesController {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Please fill out all fields.");
                 alert.show();
             }
-
-
         }
     }
 
@@ -222,8 +220,6 @@ public class MyTunesController {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Please fill out all fields.");
                 alert.show();
             }
-
-
         }
     }
 
@@ -260,8 +256,7 @@ public class MyTunesController {
             {
                 sangeIplayliste.setAll(p.getSongsList()); //vises de sange der tilhørere playlisten
             }
-        } else
-        if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) //hvis brugeren klikker 2 gange
+        } else if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) //hvis brugeren klikker 2 gange
         {
             Playlist p = tableViewPlaylists.getSelectionModel().getSelectedItem(); //variabel der gemmer den playliste der er markeret
             if (p != null) { //tjek at der er en markeret playliste
@@ -487,7 +482,8 @@ public class MyTunesController {
             }
 
         } catch (Exception e) { //hvis der sker en fejl i afspilningen, så får brugeren besked
-            currentlyPlayingSong.setText("Error: " + e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Error. The file could not be played!");
+            alert.show();
         }
     }
 
@@ -511,7 +507,7 @@ public class MyTunesController {
     @FXML
     void handlePauseSong(MouseEvent event)
     {
-        if (mediaPlayer != null)
+        if (mediaPlayer != null) //hvis der afspilles en sang
         {
             mediaPlayer.pause();
         }
