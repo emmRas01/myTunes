@@ -288,24 +288,6 @@ public class MyTunesController {
     }
 
     @FXML
-    void handleBackToPreviousSong(ActionEvent event) {
-
-        //henter index på den sang der er valgt i TableView
-        int index = tableViewSongs.getSelectionModel().getSelectedIndex();
-
-        //hvis vi ikke er på første sang - vælg forrige
-        if (index > 0) {
-
-            //vælg sangen før den nuværende
-            tableViewSongs.getSelectionModel().select(index - 1);
-
-            //scroll så den forrige sang bliver synlig i mp3 afspilleren
-            tableViewSongs.scrollTo(index - 1);
-        }
-
-    }
-
-    @FXML
     void handleDeletePlaylist(ActionEvent event)
     {
         Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem(); //henter den playliste som brugeren har markeret
@@ -519,7 +501,11 @@ public class MyTunesController {
         {
             valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem();
         }
-        playSong(valgtSang); //den valgte sang afspilles - enten fra den ene eller anden liste
+
+        if (valgtSang != null) //hvis der er valgt en sang
+        {
+            playSong(valgtSang); //den valgte sang afspilles - enten fra den ene eller anden liste
+        }
     }
 
     @FXML
@@ -569,7 +555,7 @@ public class MyTunesController {
         //henter index på den sang der aktuelt er valgt i TableView
         int index = tableViewSongs.getSelectionModel().getSelectedIndex();
 
-        //hvis vi IKKE er på den sidste sang i listen → vælg næste sang
+        //hvis vi IKKE er på den sidste sang i listen -> vælg næste sang
         if (index < sange.size() - 1) {
 
             //vælg den næste sang i rækken
@@ -577,6 +563,37 @@ public class MyTunesController {
 
             //scroll så den nye valgte sang bliver synlig i mp3 afspilleren
             tableViewSongs.scrollTo(index + 1);
+
+            Song næsteSang = tableViewSongs.getSelectionModel().getSelectedItem(); //henter den nye markerede sang
+
+            if (næsteSang != null) //hvis der er en ny markeret sang
+            {
+                playSong(næsteSang); //afspilles den
+            }
+        }
+    }
+
+    @FXML
+    void handleBackToPreviousSong(ActionEvent event) {
+
+        //henter index på den sang der er valgt i TableView
+        int index = tableViewSongs.getSelectionModel().getSelectedIndex();
+
+        //hvis vi ikke er på første sang - vælg forrige
+        if (index > 0) {
+
+            //vælg sangen før den nuværende
+            tableViewSongs.getSelectionModel().select(index - 1);
+
+            //scroll så den forrige sang bliver synlig i mp3 afspilleren
+            tableViewSongs.scrollTo(index - 1);
+
+            Song næsteSang = tableViewSongs.getSelectionModel().getSelectedItem(); //henter den nye markerede sang
+
+            if (næsteSang != null) //hvis der er en ny markeret sang
+            {
+                playSong(næsteSang); //afspilles den
+            }
         }
     }
 
