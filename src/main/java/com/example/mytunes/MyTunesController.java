@@ -477,6 +477,7 @@ public class MyTunesController {
 
                 //udskriver hvilken sang der afspilles, så brugeren kan se det
                 currentlyPlayingSong.setText(valgtSang.getTitle());
+
             } else { //hvis brugeren ikke har valgt en ny sang -> genoptages sangafspilningen bare efter den har været på pause
                 mediaPlayer.play();
             }
