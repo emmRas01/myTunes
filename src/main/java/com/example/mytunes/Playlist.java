@@ -7,20 +7,16 @@ public class Playlist implements Serializable //denne klasse skal kunne gemmes p
 {
     private static final long serialVersionUID = 2L; //id til serialisering skal være unikt for hver klasse
 
-    //Definition af Attributterne name, songs og time
+    //Definition af Attribut name
     private String name;
-    private String song;
-    private String time;
 
     //Array-liste til at gemme en eller flere sang-objekter i en playliste
     private ArrayList<Song> songs = new ArrayList<>();
 
     //konstruktør
-    public Playlist(String name, String song, String time)
+    public Playlist(String name)
     {
         this.name = name;
-        this.song = song;
-        this.time = time;
     }
 
     //Metode til at tilføje en sang til arrayListen der indeholder de sange der tilhører en playliste
@@ -47,28 +43,8 @@ public class Playlist implements Serializable //denne klasse skal kunne gemmes p
         return name;
     }
 
-    public String getSongs()
-    {
-        return song;
-    }
-
-    public String getTime()
-    {
-        return time;
-    }
-
     public void setName(String n)
     {
         name = n;
-    }
-
-    public void setSongs(String s)
-    {
-        song = s;
-    }
-
-    public void setTime(String t)
-    {
-        time = t;
     }
 }

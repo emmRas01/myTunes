@@ -34,13 +34,7 @@ public class MyTunesController {
     private TableColumn<Playlist, String> kolonneName;
 
     @FXML
-    private TableColumn<Playlist, String> kolonnePlaylistTime;
-
-    @FXML
     private TableColumn<Song, String> kolonneSongTime;
-
-    @FXML
-    private TableColumn<Playlist, String> kolonneSongs;
 
     @FXML
     private TableColumn<Song, String> kolonneTitle;
@@ -75,8 +69,6 @@ public class MyTunesController {
     {
         //Kolonnerne sættes op med forbindelse til klassen Playlist med hver sit felt
         kolonneName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        kolonneSongs.setCellValueFactory(new PropertyValueFactory<>("songs"));
-        kolonnePlaylistTime.setCellValueFactory(new PropertyValueFactory<>("time"));
 
         //Kolonnerne sættes op med forbindelse til klassen Song med hver sit felt
         kolonneTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -127,14 +119,9 @@ public class MyTunesController {
         //Opretter tekstfelter til title, song, time
         TextField titleFelt = new TextField();
         titleFelt.setPromptText("Name");
-        TextField songFelt = new TextField();
-        songFelt.setPromptText("Song");
-        TextField timeFelt = new TextField();
-        timeFelt.setPromptText("Time");
-
 
         //opretter en VBox med 3 tekstfelter og med 10 pixels mellemrum
-        VBox box = new VBox(10, titleFelt, songFelt, timeFelt);
+        VBox box = new VBox(10, titleFelt);
         dialog.getDialogPane().setContent(box); //VBoxen sættes ind som indhold i dialogboksen
 
         Optional<ButtonType> resultat = dialog.showAndWait(); //viser dialogen og stopper og venter på at brugeren klikker OK eller Cancel
@@ -142,11 +129,9 @@ public class MyTunesController {
         if (resultat.isPresent() && resultat.get() == ButtonType.OK) //Tjekker om brugeren har valgt en knap og om det er OK-knappen
         {
             String name = titleFelt.getText(); //henter den tekst brugeren har skrevet i felterne
-            String song = songFelt.getText();
-            String time = timeFelt.getText();
 
-            if (!name.isEmpty() && !song.isEmpty() && !time.isEmpty()) {
-                Playlist nyPlaylist = new Playlist(name, song, time); //opretter det nye sang objekt
+            if (!name.isEmpty()) {
+                Playlist nyPlaylist = new Playlist(name); //opretter det nye sang objekt
                 playlister.add(nyPlaylist); //den nye sang tilføjes til vores ObservableList sange
                 tableViewPlaylists.refresh(); //tableView opdateres
                 tableViewPlaylists.sort();
@@ -292,8 +277,7 @@ public class MyTunesController {
             //opretter et vindue hvor brugeren kan bekræfte at den skulle slettes
             Alert erDuSikkerAlarm = new Alert(Alert.AlertType.CONFIRMATION);
             erDuSikkerAlarm.setTitle("Delete Playlist");
-            erDuSikkerAlarm.setHeaderText("Are you sure?");
-            erDuSikkerAlarm.setContentText("Are you sure you want to delete this playlist?");
+            erDuSikkerAlarm.setHeaderText("Are you sure you want to delete this playlist?");
 
             Optional<ButtonType> beslutning = erDuSikkerAlarm.showAndWait(); //venter på at brugeren klikker ok
 
@@ -324,9 +308,8 @@ public class MyTunesController {
         {
             //opretter et vindue hvor brugeren kan bekræfte at den skulle slettes
             Alert erDuSikkerAlarm = new Alert(Alert.AlertType.CONFIRMATION);
-            erDuSikkerAlarm.setTitle("Delete Playlist");
-            erDuSikkerAlarm.setHeaderText("Are you sure?");
-            erDuSikkerAlarm.setContentText("Are you sure you want to delete this playlist?");
+            erDuSikkerAlarm.setTitle("Delete Song");
+            erDuSikkerAlarm.setHeaderText("Are you sure you want to delete this song?");
 
             Optional<ButtonType> beslutning = erDuSikkerAlarm.showAndWait(); //venter på at brugeren klikker ok
 
@@ -355,9 +338,8 @@ public class MyTunesController {
         {
             //opretter et vindue hvor brugeren kan bekræfte at den skulle slettes
             Alert erDuSikkerAlarm = new Alert(Alert.AlertType.CONFIRMATION);
-            erDuSikkerAlarm.setTitle("Delete Playlist");
-            erDuSikkerAlarm.setHeaderText("Are you sure?");
-            erDuSikkerAlarm.setContentText("Are you sure you want to delete this playlist?");
+            erDuSikkerAlarm.setTitle("Delete Song from Playlist");
+            erDuSikkerAlarm.setHeaderText("Are you sure you want to delete this song from the playlist?");
 
             Optional<ButtonType> beslutning = erDuSikkerAlarm.showAndWait(); //venter på at brugeren klikker ok
 
@@ -603,18 +585,12 @@ public class MyTunesController {
         dialogvindue.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         TextField name = new TextField();
         name.setPromptText("Enter name");
-        TextField songs = new TextField();
-        songs.setPromptText("Enter number of songs");
-        TextField time = new TextField();
-        time.setPromptText("Enter time");
 
-        VBox box = new VBox(10, name, songs, time); //10 pixels mellemrum mellem hver tekst felt
+        VBox box = new VBox(10, name); //10 pixels mellemrum mellem hver tekst felt
         dialogvindue.getDialogPane().setContent(box);
 
         //Sæt data i felterne fra playliste-objektet
         name.setText(p.getName());
-        songs.setText(p.getSongs());
-        time.setText(p.getTime());
 
         //Her afsluttes dialogen med at man kan trykke på OK
         Optional<ButtonType> knap = dialogvindue.showAndWait();
@@ -622,8 +598,6 @@ public class MyTunesController {
         // Hvis man trykker OK gemmes data fra felterne og tabellen opdateres
         if (knap.isPresent() && knap.get() == ButtonType.OK) {
             p.setName(name.getText());
-            p.setSongs(songs.getText());
-            p.setTime(time.getText());
             tableViewPlaylists.refresh();
             tableViewPlaylists.sort();
         }

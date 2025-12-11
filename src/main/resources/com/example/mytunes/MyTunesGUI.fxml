@@ -36,9 +36,7 @@
    <children>
       <TableView fx:id="tableViewPlaylists" onKeyPressed="#tastOpNedPlaylists" onMouseClicked="#museklikPlaylists" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="3">
         <columns>
-          <TableColumn fx:id="kolonneName" prefWidth="228.5" text="Name" />
-          <TableColumn fx:id="kolonneSongs" minWidth="0.0" prefWidth="58.0" text="Songs" />
-            <TableColumn fx:id="kolonnePlaylistTime" prefWidth="77.5" text="Time" />
+          <TableColumn fx:id="kolonneName" prefWidth="363.5" text="Name" />
         </columns>
       </TableView>
       <TableView fx:id="tableViewSongs" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="7" GridPane.rowIndex="3">
