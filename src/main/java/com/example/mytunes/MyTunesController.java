@@ -76,7 +76,7 @@ public class MyTunesController {
         kolonneCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
         kolonneSongTime.setCellValueFactory(new PropertyValueFactory<>("time"));
 
-        //når programmet starter læses data ind fra filen playlists.txt
+        //når programmet starter læses data ind fra filen playlists.txt og songs.txt
         try {
             playlister = læsPlaylistObjekter();
             sange = læsSangObjekter();
