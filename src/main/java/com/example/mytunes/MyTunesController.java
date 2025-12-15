@@ -320,12 +320,32 @@ public class MyTunesController {
 
             Optional<ButtonType> beslutning = erDuSikkerAlarm.showAndWait(); //venter på at brugeren klikker ok
 
-            if (beslutning.isPresent() && beslutning.get() == ButtonType.OK) //hvis brugeren klikker ok
+            //hvis brugeren klikker ok
+            if (beslutning.isPresent() && beslutning.get() == ButtonType.OK)
             {
-                sange.remove(valgtSang); //fjernes denne sang fra sang listen (ObservableList sange)
+                //stop afspilningen hvis den slettede sang spiller
+                if (currentSong != null && currentSong.equals(valgtSang))
+                {
+                    if (mediaPlayer != null)
+                    {
+                        mediaPlayer.stop();
+                        mediaPlayer = null;
+                    }
+
+                    currentSong = null;
+                    currentSongList = null;
+                    currentlyPlayingSong.setText("");
+
+                    tableViewSongs.getSelectionModel().clearSelection();
+                    listViewSongsOnPlaylist.getSelectionModel().clearSelection();
+                }
+
+                //sangen slettes fra sang listen (ObservableList sange)
+                sange.remove(valgtSang);
             }
 
-            if (beslutning.isPresent() && beslutning.get() == ButtonType.CANCEL) //hvis brugeren klikker cancel
+            //hvis brugeren klikker cancel
+            if (beslutning.isPresent() && beslutning.get() == ButtonType.CANCEL)
             {
                 System.out.println("Nothing got deleted");
             }
@@ -350,15 +370,36 @@ public class MyTunesController {
 
             Optional<ButtonType> beslutning = erDuSikkerAlarm.showAndWait(); //venter på at brugeren klikker ok
 
-            if (beslutning.isPresent() && beslutning.get() == ButtonType.OK) //hvis brugeren klikker ok
+            //hvis brugeren klikker ok
+            if (beslutning.isPresent() && beslutning.get() == ButtonType.OK)
             {
+                //afspilningen stoppes hvis den slettede sang spiller
+                if (currentSong != null && currentSong.equals(valgtSang))
+                {
+                    if  (mediaPlayer != null)
+                    {
+                        mediaPlayer.stop();
+                        mediaPlayer = null;
+                    }
+
+                    currentSong = null;
+                    currentSongList = null;
+                    currentlyPlayingSong.setText("");
+
+                    tableViewSongs.getSelectionModel().clearSelection();
+                    listViewSongsOnPlaylist.getSelectionModel().clearSelection();
+                }
+
+                //sangen slettes i playlisten
                 valgtPlayliste.getSongsList().remove(valgtSang);
-                sangeIplayliste.setAll(valgtPlayliste.getSongsList());
+                sangeIplayliste.setAll(valgtPlayliste.getSongsList()); //listen opdateres
+
                 //sætter markøren til den sidste sang i listViewet -> så brugeren kan slette hele listen hurtigt ved behov
                 listViewSongsOnPlaylist.getSelectionModel().selectLast();
             }
 
-            if (beslutning.isPresent() && beslutning.get() == ButtonType.CANCEL) //hvis brugeren klikker cancel
+            //hvis brugeren klikker cancel
+            if (beslutning.isPresent() && beslutning.get() == ButtonType.CANCEL)
             {
                 System.out.println("Nothing got deleted");
             }
@@ -501,7 +542,6 @@ public class MyTunesController {
                         listViewSongsOnPlaylist.getSelectionModel().select(næsteSang);
                         listViewSongsOnPlaylist.scrollTo(næsteSang);
                     }
-
                 }
             });
 
