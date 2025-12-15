@@ -288,13 +288,33 @@ public class MyTunesController {
 
             Optional<ButtonType> beslutning = erDuSikkerAlarm.showAndWait(); //venter på at brugeren klikker ok
 
-            if (beslutning.isPresent() && beslutning.get() == ButtonType.OK) //hvis brugeren klikker ok
+            //hvis brugeren klikker ok
+            if (beslutning.isPresent() && beslutning.get() == ButtonType.OK)
             {
-                playlister.remove(valgtPlayliste); //fjernes den fra playlist listen (ObservableList Playlister)
+                //stop afspilningen hvis der afspilles en sang fra den playliste der slettes
+                if (currentSong != null && valgtPlayliste.getSongsList().contains(currentSong))
+                {
+                    if (mediaPlayer != null)
+                    {
+                        mediaPlayer.stop();
+                        mediaPlayer = null;
+                    }
+
+                    currentSong = null;
+                    currentSongList = null;
+                    currentlyPlayingSong.setText("");
+
+                    tableViewSongs.getSelectionModel().clearSelection();
+                    listViewSongsOnPlaylist.getSelectionModel().clearSelection();
+                }
+
+                //slettes playlisten fra playlist listen
+                playlister.remove(valgtPlayliste);
                 sangeIplayliste.clear(); //clear listView'et
             }
 
-            if (beslutning.isPresent() && beslutning.get() == ButtonType.CANCEL) //hvis brugeren klikker cancel
+            //hvis brugeren klikker cancel
+            if (beslutning.isPresent() && beslutning.get() == ButtonType.CANCEL)
             {
                 System.out.println("Nothing got deleted");
             }
