@@ -231,7 +231,7 @@ public class MyTunesController {
             //Opdaterer ObservableList sangeIplayliste
             sangeIplayliste.setAll(valgtPlayliste.getSongsList());
 
-        } else { //Hvis brugeren ikke markere både en ordre og en vare, så meldes der en fejl
+        } else { //Hvis brugeren ikke markere både en playliste og en sang, så meldes der en fejl
             Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a Song and a Playlist!");
             alert.show();
         }
@@ -319,7 +319,7 @@ public class MyTunesController {
                 System.out.println("Nothing got deleted");
             }
         }
-        else //hvis brugeren ikke har markeret en ordre, så meldes der fejl
+        else //hvis brugeren ikke har markeret en playliste, så meldes der fejl
         {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Please choose a Playlist to Delete!");
             alert.showAndWait();
@@ -362,6 +362,9 @@ public class MyTunesController {
 
                 //sangen slettes fra sang listen (ObservableList sange)
                 sange.remove(valgtSang);
+
+                //sætter markøren til den sidste sang i tableViewet -> så brugeren kan slette hele listen hurtigt ved behov
+                tableViewSongs.getSelectionModel().selectLast();
             }
 
             //hvis brugeren klikker cancel
@@ -514,7 +517,7 @@ public class MyTunesController {
                 return;
             }
 
-            //hvis det er samme sang og den er pauset, så play
+            //hvis det er samme sang og den er pauset, så play/afspil
             if (mediaPlayer != null && valgtSang.equals(currentSong) && mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED)
             {
                 mediaPlayer.play();
@@ -545,6 +548,7 @@ public class MyTunesController {
 
             mediaPlayer.play(); //afspiller sangen
 
+            //næste sang afspilles automatisk
             mediaPlayer.setOnEndOfMedia(() -> {
                 int index = currentSongList.indexOf(currentSong);
                 if (index < currentSongList.size() - 1)
@@ -626,6 +630,10 @@ public class MyTunesController {
         {
             mediaPlayer.pause();
         }
+        else
+        {
+            System.out.println("Please select a song to play or pause!");
+        }
     }
 
     //metode til søge-knappen
@@ -663,46 +671,52 @@ public class MyTunesController {
     @FXML
     void handleSkipSong(ActionEvent event)
     {
-        int index = currentSongList.indexOf(currentSong);
+        try {
+            int index = currentSongList.indexOf(currentSong);
 
-        if (index >= 0 && index < currentSongList.size() - 1)
+            if (index >= 0 && index < currentSongList.size() - 1) {
+                Song næsteSang = currentSongList.get(index + 1);
+                playSong(næsteSang);
+
+                //flytter markøren, så brugeren kan se hvilken sang der er skippet til
+                if (currentSongList == tableViewSongs.getItems()) {
+                    tableViewSongs.getSelectionModel().select(næsteSang);
+                    tableViewSongs.scrollTo(næsteSang);
+                } else {
+                    listViewSongsOnPlaylist.getSelectionModel().select(næsteSang);
+                    listViewSongsOnPlaylist.scrollTo(næsteSang);
+                }
+            }
+        }
+        catch (Exception e)
         {
-            Song næsteSang = currentSongList.get(index + 1);
-            playSong(næsteSang);
-
-            //flytter markøren, så brugeren kan se hvilken sang der er skippet til
-            if (currentSongList == tableViewSongs.getItems()) {
-                tableViewSongs.getSelectionModel().select(næsteSang);
-                tableViewSongs.scrollTo(næsteSang);
-            }
-            else
-            {
-                listViewSongsOnPlaylist.getSelectionModel().select(næsteSang);
-                listViewSongsOnPlaylist.scrollTo(næsteSang);
-            }
+            System.out.println("Could not skip the song: " + e.getMessage());
         }
     }
 
     @FXML
     void handleBackToPreviousSong(ActionEvent event)
     {
-        int index = currentSongList.indexOf(currentSong);
+        try {
+            int index = currentSongList.indexOf(currentSong);
 
-        if (index > 0)
+            if (index > 0) {
+                Song forrigeSang = currentSongList.get(index - 1);
+                playSong(forrigeSang);
+
+                //flytter markøren, så brugeren kan se hvilken sang der er skippet til
+                if (currentSongList == tableViewSongs.getItems()) {
+                    tableViewSongs.getSelectionModel().select(forrigeSang);
+                    tableViewSongs.scrollTo(forrigeSang);
+                } else {
+                    listViewSongsOnPlaylist.getSelectionModel().select(forrigeSang);
+                    listViewSongsOnPlaylist.scrollTo(forrigeSang);
+                }
+            }
+        }
+        catch (Exception e)
         {
-            Song forrigeSang = currentSongList.get(index - 1);
-            playSong(forrigeSang);
-
-            //flytter markøren, så brugeren kan se hvilken sang der er skippet til
-            if (currentSongList == tableViewSongs.getItems()) {
-                tableViewSongs.getSelectionModel().select(forrigeSang);
-                tableViewSongs.scrollTo(forrigeSang);
-            }
-            else
-            {
-                listViewSongsOnPlaylist.getSelectionModel().select(forrigeSang);
-                listViewSongsOnPlaylist.scrollTo(forrigeSang);
-            }
+            System.out.println("Could not skip back to the previous song: " + e.getMessage());
         }
     }
 
@@ -751,8 +765,6 @@ public class MyTunesController {
         TextField fileField = new TextField();
         fileField.setPromptText("Enter filename");
         fileField.setEditable(false); //gør at brugeren ikke kan taste i feltet
-
-
 
         //Opretter en file chooser knap
         Button selectFileButton = new Button("Select File");
@@ -825,8 +837,8 @@ public class MyTunesController {
     //metode der bruges til at gemme data når brugeren lukker vinduet
     public void gemData() throws IOException
     {
-        skrivPlaylisteObjekter(playlister);//gemmer Playlist objekter i filen ordrer.txt
-        skrivSongsObjekter(sange); //gemmer Song objekter i filen varelager.txt
+        skrivPlaylisteObjekter(playlister);//gemmer Playlist objekter i filen playlists.txt
+        skrivSongsObjekter(sange); //gemmer Song objekter i filen songs.txt
     }
 
     //metode der indlæser gemte Playlister fra filen playlists.txt
@@ -845,7 +857,7 @@ public class MyTunesController {
         return (ObservableList<Playlist>) liste;
     }
 
-    //metode der indlæser gemte varer fra filen songs.txt
+    //metode der indlæser gemte sange fra filen songs.txt
     private ObservableList<Song> læsSangObjekter() throws IOException, ClassNotFoundException {
         ObservableList<Song> liste = FXCollections.observableArrayList();
         FileInputStream fileInputStream = new FileInputStream("songs.txt");
