@@ -67,7 +67,7 @@ public class MyTunesController {
 
     public void initialize() //køres når programmet starter
     {
-        //Kolonnerne sættes op med forbindelse til klassen Playlist med hver sit felt
+        //Kolonnen sættes op med forbindelse til klassen Playlist
         kolonneName.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         //Kolonnerne sættes op med forbindelse til klassen Song med hver sit felt
@@ -94,7 +94,7 @@ public class MyTunesController {
 
         //når brugeren rykker på slideren ændres volumen
         volumenSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            mediaPlayer.setVolume(newValue.doubleValue() / 100);
+            mediaPlayer.setVolume(newValue.doubleValue() / 100); //konvertere fra procent (0 - 100) til brøk (0.0 - 1.0)
         });
 
         //sortering af playliste navne i alfabetisk rækkefølge
@@ -108,7 +108,7 @@ public class MyTunesController {
         tableViewSongs.sort(); //udfører sorteringen i TableViewet
     }
 
-    @FXML
+    @FXML //metode til at brugeren kan tilføje/oprette en ny playliste
     void handleAddNewPlaylist(ActionEvent event)
     {
         Dialog<ButtonType> dialog = new Dialog<>(); //Opretter en ny dialogboks, hvor knapperne (OK/Cancel) er typen ButtonType
@@ -116,7 +116,7 @@ public class MyTunesController {
         dialog.setHeaderText("Enter information about the new playlist"); //overskrift
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        //Opretter tekstfelter til title, song, time
+        //Opretter tekstfeltet navn
         TextField titleFelt = new TextField();
         titleFelt.setPromptText("Name");
 
@@ -131,8 +131,8 @@ public class MyTunesController {
             String name = titleFelt.getText(); //henter den tekst brugeren har skrevet i felterne
 
             if (!name.isEmpty()) {
-                Playlist nyPlaylist = new Playlist(name); //opretter det nye sang objekt
-                playlister.add(nyPlaylist); //den nye sang tilføjes til vores ObservableList sange
+                Playlist nyPlaylist = new Playlist(name); //opretter det nye Playlist objekt
+                playlister.add(nyPlaylist); //den nye playliste tilføjes til vores ObservableList playlister
                 tableViewPlaylists.refresh(); //tableView opdateres
                 tableViewPlaylists.sort();
             } else {
@@ -142,7 +142,7 @@ public class MyTunesController {
         }
     }
 
-    @FXML
+    @FXML //metode til at brugeren kan tilføje/oprette en ny sang
     void handleAddNewSong(ActionEvent event)
     {
         Dialog<ButtonType> dialog = new Dialog<>(); //Opretter en ny dialogboks, hvor knapperne (OK/Cancel) er typen ButtonType
@@ -150,7 +150,7 @@ public class MyTunesController {
         dialog.setHeaderText("Enter information about the new song"); //overskrift
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        //Opretter tekstfelter til title, artist, category, time
+        //Opretter tekstfelter til title, artist, time og categoryBox til category
         TextField titleFelt = new TextField();
         titleFelt.setPromptText("Title");
         TextField artistFelt = new TextField();
@@ -209,7 +209,8 @@ public class MyTunesController {
     }
 
 
-    //når brugeren klikker på knappen med en pilen tilføjes den markeret sang til den markerede playliste
+    //metode til når brugeren klikker på knappen med en pilen til venstre
+    //funktion: den markeret sang tilføjes til den markerede playliste
     @FXML
     void handleAddSongToPlaylist(ActionEvent event)
     {
@@ -442,7 +443,7 @@ public class MyTunesController {
         {
             String filSti = new File(valgtSang.getMusicFile()).toURI().toString(); //henter fil-stien til sangen via getMusicFile()
 
-            if (mediaPlayer == null || !valgtSang.equals(currentSong))
+            if (true)
             {
                 if (mediaPlayer != null) //hvis der i forvejen afspilles musik, stoppes den inden den nye valgte sang afspilles
                 {

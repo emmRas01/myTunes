@@ -3,7 +3,8 @@ package com.example.mytunes;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Playlist implements Serializable //denne klasse skal kunne gemmes på en fil -> derfor skal man implementere Serializable
+//denne klasse skal kunne gemmes på en fil -> derfor skal man implementere Serializable
+public class Playlist implements Serializable
 {
     private static final long serialVersionUID = 2L; //id til serialisering skal være unikt for hver klasse
 
@@ -37,7 +38,8 @@ public class Playlist implements Serializable //denne klasse skal kunne gemmes p
         songs = songList;
     }
 
-    //Der skal være get-metoder og set-metoder for at tableview Playlist både kan hente data og indsætte ny data
+    //Der skal være get-metoder og set-metoder
+    //for at tableview Playlist både kan hente data og indsætte ny data når brugeren redigere playliste navnet
     public String getName()
     {
         return name;
