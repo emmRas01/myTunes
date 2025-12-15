@@ -65,6 +65,9 @@ public class MyTunesController {
     //variabel til at indholde hvilken sang der spilles lige nu
     private Song currentSong;
 
+    //liste til at holde styr på hvilken liste der afspilles fra nu
+    private ObservableList<Song> currentSongList;
+
     public void initialize() //køres når programmet starter
     {
         //Kolonnen sættes op med forbindelse til klassen Playlist
@@ -94,7 +97,10 @@ public class MyTunesController {
 
         //når brugeren rykker på slideren ændres volumen
         volumenSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            mediaPlayer.setVolume(newValue.doubleValue() / 100); //konvertere fra procent (0 - 100) til brøk (0.0 - 1.0)
+            if (mediaPlayer != null)
+            {
+                mediaPlayer.setVolume(newValue.doubleValue() / 100); //konverterer fra procent (0 - 100) til brøk (0.0 - 1.0)
+            }
         });
 
         //sortering af playliste navne i alfabetisk rækkefølge
@@ -441,29 +447,63 @@ public class MyTunesController {
     {
         try
         {
-            String filSti = new File(valgtSang.getMusicFile()).toURI().toString(); //henter fil-stien til sangen via getMusicFile()
-
-            if (true)
+            //hvis der ikke er valgt en sang sker der ingen ting -> metoden stoppes ved return
+            if (valgtSang == null)
             {
-                if (mediaPlayer != null) //hvis der i forvejen afspilles musik, stoppes den inden den nye valgte sang afspilles
-                {
-                    mediaPlayer.stop();
-                }
-
-                //opretter et Medie/musikfilen, opretter Medieplayer med mediet indeni
-                Media media = new Media(filSti);
-                mediaPlayer = new MediaPlayer(media);
-
-                currentSong = valgtSang; //gemmer den valgte sang som currentSong
-
-                mediaPlayer.play(); //afspiller sangen
-
-                //udskriver hvilken sang der afspilles, så brugeren kan se det
-                currentlyPlayingSong.setText(valgtSang.getTitle());
-
-            } else { //hvis brugeren ikke har valgt en ny sang -> genoptages sangafspilningen bare efter den har været på pause
-                mediaPlayer.play();
+                return;
             }
+
+            //hvis det er samme sang og den er pauset, så play
+            if (mediaPlayer != null && valgtSang.equals(currentSong) && mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED)
+            {
+                mediaPlayer.play();
+                return;
+            }
+
+            //hvis der i forvejen afspilles musik, stoppes den inden den nye valgte sang afspilles
+            if (mediaPlayer != null)
+            {
+                mediaPlayer.stop();
+            }
+
+            //henter fil-stien til sangen via getMusicFile()
+            String filSti = new File(valgtSang.getMusicFile()).toURI().toString();
+
+            //opretter et Medie/musikfilen, opretter Medieplayer med mediet indeni
+            Media media = new Media(filSti);
+            mediaPlayer = new MediaPlayer(media);
+
+            //hver gang der bliver oprettet en ny mediaPlayer, så mister man de tidligere volumen indstillinger
+            //volumen slider sættes derfor til det nye mediaPlayer objekt, hver gang man spiller en ny sang
+            mediaPlayer.setVolume(volumenSlider.getValue() / 100); //konverterer fra procent (0 - 100) til brøk (0.0 - 1.0)
+
+            currentSong = valgtSang; //gemmer den valgte sang som currentSong
+
+            //udskriver hvilken sang der afspilles, så brugeren kan se det
+            currentlyPlayingSong.setText(valgtSang.getTitle());
+
+            mediaPlayer.play(); //afspiller sangen
+
+            mediaPlayer.setOnEndOfMedia(() -> {
+                int index = currentSongList.indexOf(currentSong);
+                if (index < currentSongList.size() - 1)
+                {
+                    Song næsteSang = currentSongList.get(index + 1);
+                    playSong(næsteSang);
+
+                    //flytter markøren, så brugeren kan se hvilken sang der automatisk afspilles
+                    if (currentSongList == tableViewSongs.getItems()) {
+                        tableViewSongs.getSelectionModel().select(næsteSang);
+                        tableViewSongs.scrollTo(næsteSang);
+                    }
+                    else
+                    {
+                        listViewSongsOnPlaylist.getSelectionModel().select(næsteSang);
+                        listViewSongsOnPlaylist.scrollTo(næsteSang);
+                    }
+
+                }
+            });
 
         } catch (Exception e) { //hvis der sker en fejl i afspilningen, så får brugeren besked
             Alert alert = new Alert(Alert.AlertType.WARNING, "Error. The file could not be played!");
@@ -471,20 +511,51 @@ public class MyTunesController {
         }
     }
 
+    //metode der holder styr på brugerens sangvalg i listView
+    @FXML
+    void handleSongSelectedFromListView(MouseEvent event)
+    {
+        Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem();
+
+        if (valgtSang != null)
+        {
+            currentSong = valgtSang;
+            currentSongList = listViewSongsOnPlaylist.getItems();
+            tableViewSongs.getSelectionModel().clearSelection();
+        }
+    }
+
+    //metode der holder styr på brugerens sangvalg i tableView
+    @FXML
+    void handleSongSelectedFromTableView(MouseEvent event)
+    {
+        Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem();
+
+        if (valgtSang != null)
+        {
+            currentSong = valgtSang;
+            currentSongList = tableViewSongs.getItems();
+            listViewSongsOnPlaylist.getSelectionModel().clearSelection();
+        }
+    }
+
     @FXML
     void handlePlaySong(MouseEvent event)
     {
-        Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem(); //henter sangen som brugeren har markeret i tableview
-        //Hvis der ikke er valgt en sang i tableView(listen med alle sange), så tjekkes der om
-        //brugeren har valgt en sang i listViewet(listen med sange tilhørende en playliste):
-        if (valgtSang == null)
+        if (mediaPlayer != null && mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED)
         {
-            valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem();
+            mediaPlayer.play();
+            return;
         }
 
-        if (valgtSang != null) //hvis der er valgt en sang
+        if (currentSong != null)
         {
-            playSong(valgtSang); //den valgte sang afspilles - enten fra den ene eller anden liste
+            playSong(currentSong);
+        }
+        else
+        {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a song to play!");
+            alert.show();
         }
     }
 
@@ -530,49 +601,47 @@ public class MyTunesController {
     }
 
     @FXML
-    void handleSkipSong(ActionEvent event) {
+    void handleSkipSong(ActionEvent event)
+    {
+        int index = currentSongList.indexOf(currentSong);
 
-        //henter index på den sang der aktuelt er valgt i TableView
-        int index = tableViewSongs.getSelectionModel().getSelectedIndex();
+        if (index >= 0 && index < currentSongList.size() - 1)
+        {
+            Song næsteSang = currentSongList.get(index + 1);
+            playSong(næsteSang);
 
-        //hvis vi IKKE er på den sidste sang i listen -> vælg næste sang
-        if (index < sange.size() - 1) {
-
-            //vælg den næste sang i rækken
-            tableViewSongs.getSelectionModel().select(index + 1);
-
-            //scroll så den nye valgte sang bliver synlig i mp3 afspilleren
-            tableViewSongs.scrollTo(index + 1);
-
-            Song næsteSang = tableViewSongs.getSelectionModel().getSelectedItem(); //henter den nye markerede sang
-
-            if (næsteSang != null) //hvis der er en ny markeret sang
+            //flytter markøren, så brugeren kan se hvilken sang der er skippet til
+            if (currentSongList == tableViewSongs.getItems()) {
+                tableViewSongs.getSelectionModel().select(næsteSang);
+                tableViewSongs.scrollTo(næsteSang);
+            }
+            else
             {
-                playSong(næsteSang); //afspilles den
+                listViewSongsOnPlaylist.getSelectionModel().select(næsteSang);
+                listViewSongsOnPlaylist.scrollTo(næsteSang);
             }
         }
     }
 
     @FXML
-    void handleBackToPreviousSong(ActionEvent event) {
+    void handleBackToPreviousSong(ActionEvent event)
+    {
+        int index = currentSongList.indexOf(currentSong);
 
-        //henter index på den sang der er valgt i TableView
-        int index = tableViewSongs.getSelectionModel().getSelectedIndex();
+        if (index > 0)
+        {
+            Song forrigeSang = currentSongList.get(index - 1);
+            playSong(forrigeSang);
 
-        //hvis vi ikke er på første sang - vælg forrige
-        if (index > 0) {
-
-            //vælg sangen før den nuværende
-            tableViewSongs.getSelectionModel().select(index - 1);
-
-            //scroll så den forrige sang bliver synlig i mp3 afspilleren
-            tableViewSongs.scrollTo(index - 1);
-
-            Song næsteSang = tableViewSongs.getSelectionModel().getSelectedItem(); //henter den nye markerede sang
-
-            if (næsteSang != null) //hvis der er en ny markeret sang
+            //flytter markøren, så brugeren kan se hvilken sang der er skippet til
+            if (currentSongList == tableViewSongs.getItems()) {
+                tableViewSongs.getSelectionModel().select(forrigeSang);
+                tableViewSongs.scrollTo(forrigeSang);
+            }
+            else
             {
-                playSong(næsteSang); //afspilles den
+                listViewSongsOnPlaylist.getSelectionModel().select(forrigeSang);
+                listViewSongsOnPlaylist.scrollTo(forrigeSang);
             }
         }
     }

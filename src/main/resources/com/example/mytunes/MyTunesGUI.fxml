@@ -39,7 +39,7 @@
           <TableColumn fx:id="kolonneName" prefWidth="363.5" text="Name" />
         </columns>
       </TableView>
-      <TableView fx:id="tableViewSongs" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="7" GridPane.rowIndex="3">
+      <TableView fx:id="tableViewSongs" onMouseClicked="#handleSongSelectedFromTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="7" GridPane.rowIndex="3">
         <columns>
           <TableColumn fx:id="kolonneTitle" prefWidth="132.5" text="Title" />
           <TableColumn fx:id="kolonneArtist" prefWidth="124.0" text="Artist" />
@@ -47,7 +47,7 @@
             <TableColumn fx:id="kolonneSongTime" prefWidth="70.0" text="Time" />
         </columns>
       </TableView>
-      <ListView fx:id="listViewSongsOnPlaylist" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+      <ListView fx:id="listViewSongsOnPlaylist" onMouseClicked="#handleSongSelectedFromListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="3" />
       <Button mnemonicParsing="false" onAction="#handleAddSongToPlaylist" text="⬅" GridPane.columnIndex="6" GridPane.rowIndex="3" GridPane.valignment="TOP">
          <font>
             <Font size="31.0" />
