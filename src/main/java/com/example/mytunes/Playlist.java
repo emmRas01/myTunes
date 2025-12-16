@@ -8,10 +8,10 @@ public class Playlist implements Serializable
 {
     private static final long serialVersionUID = 2L; //id til serialisering skal være unikt for hver klasse
 
-    //Definition af Attribut name
+    //definition af Attribut name
     private String name;
 
-    //Array-liste til at gemme en eller flere sang-objekter i en playliste
+    //array-liste til at gemme en eller flere sang-objekter i en playliste
     private ArrayList<Song> songs = new ArrayList<>();
 
     //konstruktør
@@ -20,25 +20,25 @@ public class Playlist implements Serializable
         this.name = name;
     }
 
-    //Metode til at tilføje en sang til arrayListen der indeholder de sange der tilhører en playliste
+    //metode til at tilføje en sang til arrayListen der indeholder de sange der tilhører en playliste
     public void tilføjSang(Song s)
     {
         songs.add(s);
     }
 
-    //Metode der returnere hele listen med sange der tilhøre en playliste
+    //metode der returnere hele listen med sange der tilhøre en playliste
     public ArrayList<Song> getSongsList()
     {
         return songs;
     }
 
-    //Setter-metode der opdatere hele Arraylisten med en ny liste af sange der tilhøre en playliste
+    //setter-metode der opdatere hele Arraylisten med en ny liste af sange der tilhøre en playliste
     public void setSongsList(ArrayList<Song> songList)
     {
         songs = songList;
     }
 
-    //Der skal være get-metoder og set-metoder
+    //der skal være get-metoder og set-metoder
     //for at tableview Playlist både kan hente data og indsætte ny data når brugeren redigere playliste navnet
     public String getName()
     {

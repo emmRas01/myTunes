@@ -76,7 +76,7 @@ public class Song implements Serializable
         this.musicFile = musicFile;
     }
 
-    //Udseende på udskrift i vores listView i midten
+    //udseende på udskrift i vores listView i midten
     @Override
     public String toString()
     {

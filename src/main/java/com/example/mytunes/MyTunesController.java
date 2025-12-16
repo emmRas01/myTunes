@@ -132,7 +132,7 @@ public class MyTunesController {
 
         Optional<ButtonType> resultat = dialog.showAndWait(); //viser dialogen og stopper og venter på at brugeren klikker OK eller Cancel
 
-        if (resultat.isPresent() && resultat.get() == ButtonType.OK) //Tjekker om brugeren har valgt en knap og om det er OK-knappen
+        if (resultat.isPresent() && resultat.get() == ButtonType.OK) //tjekker om brugeren har valgt en knap og om det er OK-knappen
         {
             String name = titleFelt.getText(); //henter den tekst brugeren har skrevet i felterne
 
