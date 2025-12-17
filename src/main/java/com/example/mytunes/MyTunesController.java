@@ -19,8 +19,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class MyTunesController {
-
+public class MyTunesController
+{
     @FXML
     private Label currentlyPlayingSong;
 
@@ -54,109 +54,116 @@ public class MyTunesController {
     @FXML
     private Slider volumenSlider;
 
-    //Definition af listerne der holder dataene
+    // Definition af listerne der holder dataene
     private ObservableList<Playlist> playlister = FXCollections.observableArrayList();
     private ObservableList<Song> sange = FXCollections.observableArrayList();
     private final ObservableList<Song> sangeIplayliste = FXCollections.observableArrayList();
 
-    //media objekt sættes op her, så den ikke bliver fjernet af garbage collectoren
+    // Media objekt sættes op her, så den ikke bliver fjernet af garbage collector
     private static MediaPlayer mediaPlayer;
 
-    //variabel til at indholde hvilken sang der spilles lige nu
+    // Variabel til at indeholde den sang der spilles lige nu
     private Song currentSong;
 
-    //liste til at holde styr på hvilken liste der afspilles fra nu
+    // Den aktuelle sangliste, som der afspilles fra lige nu
     private ObservableList<Song> currentSongList;
 
-    public void initialize() //køres når programmet starter
+    public void initialize()
     {
-        //Kolonnen sættes op med forbindelse til klassen Playlist
+        // Name kolonnen sættes op med forbindelse til klassen Playlist
         kolonneName.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        //Kolonnerne sættes op med forbindelse til klassen Song med hver sit felt
+        // Kolonnerne sættes op med forbindelse til klassen Song
         kolonneTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         kolonneArtist.setCellValueFactory(new PropertyValueFactory<>("artist"));
         kolonneCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
         kolonneSongTime.setCellValueFactory(new PropertyValueFactory<>("time"));
 
-        //når programmet starter læses data ind fra filen playlists.txt og songs.txt
-        try {
+        // Når programmet starter læses gemt data ind fra filerne playlists.txt og songs.txt
+        try
+        {
             playlister = læsPlaylistObjekter();
             sange = læsSangObjekter();
-        }  catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             System.out.println("Could not read the file: " + e.getMessage());
         }
 
-        //i vores TableViews og ListView indsættes objekterne fra vores ObservableLister (playlister, sange og sangeIplayliste)
+        // Når programmet starter sættes Song og Playlist objekter fra vores ObservableLists ind i de 2 TableViews og ListViewet
         tableViewPlaylists.setItems(playlister);
         tableViewSongs.setItems(sange);
         listViewSongsOnPlaylist.setItems(sangeIplayliste);
 
-        //når programmet starter sættes volumenSlider til lydstyrke 50 ud af 100
+        // Når programmet starter sættes volumenSlider til lydstyrke 50 ud af 100
         volumenSlider.setValue(50);
 
-        //når brugeren rykker på slideren ændres volumen
-        volumenSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+        // Når brugeren rykker på slideren ændres volumen
+        volumenSlider.valueProperty().addListener((observable, oldValue, newValue) ->
+        {
             if (mediaPlayer != null)
             {
-                mediaPlayer.setVolume(newValue.doubleValue() / 100); //konverterer fra procent (0 - 100) til brøk (0.0 - 1.0)
+                mediaPlayer.setVolume(newValue.doubleValue() / 100); // Konverterer fra procent (0 - 100) til brøk (0.0 - 1.0)
             }
         });
 
-        //sortering af playliste navne i alfabetisk rækkefølge
-        kolonneName.setSortType(TableColumn.SortType.ASCENDING); //stigende rækkefølge fra A-Z
-        tableViewPlaylists.getSortOrder().add(kolonneName); //tilføjer kolonnen, så den kan sorteres
-        tableViewPlaylists.sort(); //udfører sorteringen i TableViewet
+        // Sortering af navnene på playlisterne i alfabetisk rækkefølge
+        kolonneName.setSortType(TableColumn.SortType.ASCENDING); // Stigende fra A-Z
+        tableViewPlaylists.getSortOrder().add(kolonneName); // Tilføjer kolonnen, så den kan sorteres
+        tableViewPlaylists.sort(); // Udfører sorteringen i TableViewet
 
-        //sortering af sang navne i alfabetisk rækkefølge
-        kolonneTitle.setSortType(TableColumn.SortType.ASCENDING); //stigende rækkefølge fra A-Z
-        tableViewSongs.getSortOrder().add(kolonneTitle); //tilføjer kolonnen, så den kan sorteres
-        tableViewSongs.sort(); //udfører sorteringen i TableViewet
+        // Sortering af navnene på sangene i alfabetisk rækkefølge
+        kolonneTitle.setSortType(TableColumn.SortType.ASCENDING); // Stigende fra A-Z
+        tableViewSongs.getSortOrder().add(kolonneTitle); // Tilføjer kolonnen, så den kan sorteres
+        tableViewSongs.sort(); // Udfører sorteringen i TableViewet
     }
 
-    @FXML //metode til at brugeren kan tilføje/oprette en ny playliste
+    @FXML // Metode til at brugeren kan oprette en ny playliste (knap: Add new playlist)
     void handleAddNewPlaylist(ActionEvent event)
     {
-        Dialog<ButtonType> dialog = new Dialog<>(); //Opretter en ny dialogboks, hvor knapperne (OK/Cancel) er typen ButtonType
-        dialog.setTitle("Add new playlist"); //titlen i vinduet
-        dialog.setHeaderText("Enter information about the new playlist"); //overskrift
+        Dialog<ButtonType> dialog = new Dialog<>(); // Opretter en ny dialogboks med info-tekst og knapper (OK/Cancel)
+        dialog.setTitle("Add new playlist");
+        dialog.setHeaderText("Enter information about the new playlist");
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        //Opretter tekstfeltet navn
-        TextField titleFelt = new TextField();
+        TextField titleFelt = new TextField(); // Opretter tekstfelt til name
         titleFelt.setPromptText("Name");
 
-        //opretter en VBox med 3 tekstfelter og med 10 pixels mellemrum
-        VBox box = new VBox(10, titleFelt);
-        dialog.getDialogPane().setContent(box); //VBoxen sættes ind som indhold i dialogboksen
+        VBox box = new VBox(titleFelt); // Opretter en VBox med tekstfeltet
+        dialog.getDialogPane().setContent(box); // VBoxen sættes ind som indhold i dialogboksen
 
-        Optional<ButtonType> resultat = dialog.showAndWait(); //viser dialogen og stopper og venter på at brugeren klikker OK eller Cancel
+        // Viser dialogen, og stopper og venter på at brugeren klikker OK eller Cancel
+        Optional<ButtonType> resultat = dialog.showAndWait();
 
-        if (resultat.isPresent() && resultat.get() == ButtonType.OK) //tjekker om brugeren har valgt en knap og om det er OK-knappen
+        // Tjekker om brugeren har valgt en knap og om det er OK-knappen
+        if (resultat.isPresent() && resultat.get() == ButtonType.OK)
         {
-            String name = titleFelt.getText(); //henter den tekst brugeren har skrevet i felterne
+            String name = titleFelt.getText(); // Henter den tekst brugeren har skrevet i feltet
 
-            if (!name.isEmpty()) {
-                Playlist nyPlaylist = new Playlist(name); //opretter det nye Playlist objekt
-                playlister.add(nyPlaylist); //den nye playliste tilføjes til vores ObservableList playlister
-                tableViewPlaylists.refresh(); //tableView opdateres
+            if (!name.isEmpty()) // Tjekker at brugeren har skrevet noget i feltet
+            {
+                Playlist nyPlaylist = new Playlist(name); // Opretter det nye Playlist objekt
+                playlister.add(nyPlaylist); // Den nye playliste tilføjes til vores ObservableList playlister
+                tableViewPlaylists.refresh();
                 tableViewPlaylists.sort();
-            } else {
+            }
+            else // Hvis brugeren ikke har udfyldt feltet, får man besked -> Please fill out all fields
+            {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Please fill out all fields.");
                 alert.show();
             }
         }
     }
 
-    @FXML //metode til at brugeren kan tilføje/oprette en ny sang
+    @FXML // Metode til at brugeren kan oprette en ny sang (knap: Add new song)
     void handleAddNewSong(ActionEvent event)
     {
-        Dialog<ButtonType> dialog = new Dialog<>(); //Opretter en ny dialogboks, hvor knapperne (OK/Cancel) er typen ButtonType
-        dialog.setTitle("Add new song"); //titlen i vinduet
-        dialog.setHeaderText("Enter information about the new song"); //overskrift
+        Dialog<ButtonType> dialog = new Dialog<>(); // Opretter en ny dialogboks med info-tekst og knapper (OK/Cancel)
+        dialog.setTitle("Add new song");
+        dialog.setHeaderText("Enter information about the new song");
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        //Opretter tekstfelter til title, artist, time og categoryBox til category
+        // Opretter tekstfelter til title, artist, time, samt categoryBox til category og felt til valg af musikfil
         TextField titleFelt = new TextField();
         titleFelt.setPromptText("Title");
         TextField artistFelt = new TextField();
@@ -168,130 +175,152 @@ public class MyTunesController {
         timeFelt.setPromptText("Time");
         TextField fileChooserFelt = new TextField();
         fileChooserFelt.setPromptText("Select a mp3 File");
-        fileChooserFelt.setEditable(false); //gør at brugeren ikke kan taste i feltet
+        fileChooserFelt.setEditable(false); // Gør at brugeren ikke kan skrive i feltet
 
-        //Opretter en file chooser knap
+        // Opretter en file chooser knap
         Button selectFileButton = new Button("Select File");
-
-        //sætter action på knappen til file chooser
-        selectFileButton.setOnAction(e -> {
-            FileChooser fileChooser = new FileChooser();
+        selectFileButton.setOnAction(e -> // Sætter action på knappen til file chooser
+        {
+            FileChooser fileChooser = new FileChooser(); // Opretter fileChooser med info tekst og krav til fil-type
             fileChooser.setTitle("Select a File");
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Music File", "*.mp3", "*.wav"));
+
+            // Åbner filechooser hvori brugeren kan vælge en musikfil
             File valgtFil = fileChooser.showOpenDialog(dialog.getDialogPane().getScene().getWindow());
-            if (valgtFil != null) //hvis der er valgt en fil, så sættes tekstfeltet til den valgte fil
+
+            if (valgtFil != null) // Hvis der er valgt en fil, så sættes tekstfeltet til den valgte fil
             {
-                fileChooserFelt.setText(valgtFil.getAbsolutePath());
+                fileChooserFelt.setText(valgtFil.getAbsolutePath()); // Så brugeren kan se det
             }
         });
 
-        //Opretter en HBox til file chooser feltet og knappen
+        // Opretter en HBox til file chooser feltet og knappen, så layout bliver: [fileChooserFelt] [Select File]
         HBox fileChoserBox = new HBox(10, fileChooserFelt, selectFileButton);
 
-        //opretter en VBox med 5 tekstfelter og med 10 pixels mellemrum
+        // Opretter en VBox med de 5 tekstfelter med 10 pixels mellemrum
         VBox box = new VBox(10, titleFelt, artistFelt, categoryBox, timeFelt, fileChooserFelt, fileChoserBox);
-        dialog.getDialogPane().setContent(box); //VBoxen sættes ind som indhold i dialogboksen
+        dialog.getDialogPane().setContent(box); // VBoxen sættes ind som indhold i dialogboksen
 
-        Optional<ButtonType> resultat = dialog.showAndWait(); //viser dialogen og stopper og venter på at brugeren klikker OK eller Cancel
+        // Viser dialogen, og stopper og venter på at brugeren klikker OK eller Cancel
+        Optional<ButtonType> resultat = dialog.showAndWait();
 
-        if (resultat.isPresent() && resultat.get() == ButtonType.OK) //Tjekker om brugeren har valgt en knap og om det er OK-knappen
+        // Tjekker om brugeren har valgt en knap og om det er OK-knappen
+        if (resultat.isPresent() && resultat.get() == ButtonType.OK)
         {
-            String title = titleFelt.getText(); //henter den tekst brugeren har skrevet i felterne
+            String title = titleFelt.getText(); // Henter den tekst brugeren har skrevet i felterne
             String artist = artistFelt.getText();
             String category = categoryBox.getValue();
             String time = timeFelt.getText();
             String musicFile = fileChooserFelt.getText();
 
-            if (!title.isEmpty() && !artist.isEmpty() && !category.isEmpty() && !time.isEmpty() && !musicFile.isEmpty()) {
-                Song nySang = new Song(title, artist, category, time, musicFile); //opretter det nye sang objekt
-                sange.add(nySang); //den nye sang tilføjes til vores ObservableList sange
-                tableViewSongs.refresh(); //tableView opdateres
+            // Tjekker at brugeren har skrevet noget i felterne
+            if (!title.isEmpty() && !artist.isEmpty() && !category.isEmpty() && !time.isEmpty() && !musicFile.isEmpty())
+            {
+                Song nySang = new Song(title, artist, category, time, musicFile); // Opretter det nye Song objekt
+                sange.add(nySang); // Den nye sang tilføjes til vores ObservableList sange
+                tableViewSongs.refresh();
                 tableViewSongs.sort();
-            } else {
+            }
+            else // Hvis brugeren ikke har udfyldt felterne, får man besked -> Please fill out all fields
+            {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Please fill out all fields.");
                 alert.show();
             }
         }
     }
 
-
-    //metode til når brugeren klikker på knappen med en pilen til venstre
-    //funktion: den markeret sang tilføjes til den markerede playliste
-    @FXML
+    @FXML // Metode til at tilføje en markeret sang til en markeret playliste (knap: pil til venstre)
     void handleAddSongToPlaylist(ActionEvent event)
     {
-        Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem(); //henter den playliste som brugeren har markeret
-        Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
+        // Henter den playliste og den sang som brugeren har markeret
+        Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem();
+        Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem();
 
-        if (valgtPlayliste != null && valgtSang != null) //hvis brugeren har valgt en Playliste og en Sang
+        // Tjekker at brugeren både har valgt en Playliste og en Sang
+        if (valgtPlayliste != null && valgtSang != null)
         {
-            //sangen tilføjes til playlisten (gemmes i vores ArrayList songs der findes under Playlist-klassen)
+            // Sangen tilføjes til playlisten (gemmes i vores ArrayList songs der findes under Playlist-klassen)
             valgtPlayliste.tilføjSang(valgtSang);
 
-            //Opdaterer ObservableList sangeIplayliste
+            // Opdaterer ObservableList sangeIplayliste
             sangeIplayliste.setAll(valgtPlayliste.getSongsList());
 
-        } else { //Hvis brugeren ikke markere både en playliste og en sang, så meldes der en fejl
+        }
+        else // Hvis brugeren ikke markeret både en playliste og en sang, så får man besked
+        {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a Song and a Playlist!");
             alert.show();
         }
     }
 
-    //metode til hvad der sker hvis brugeren klikker 1 eller 2 gange på en playliste
-    @FXML
+    @FXML // Metode til hvad der sker hvis brugeren klikker 1 eller 2 gange på en playliste
     void museklikPlaylists(MouseEvent event)
     {
-        if(event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 1) //hvis brugeren klikker 1 gang
+        // Hvis brugeren klikker 1 gang vises de sange der tilhører playlisten
+        if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 1)
         {
-            Playlist p = tableViewPlaylists.getSelectionModel().getSelectedItem(); //variabel der gemmer den playliste der er markeret
-            if (p != null) //tjek at der er en markeret playliste
+            // Henter og gemmer den playliste der er markeret
+            Playlist p = tableViewPlaylists.getSelectionModel().getSelectedItem();
+
+            if (p != null) // Tjekker at der er en markeret playliste
             {
-                sangeIplayliste.setAll(p.getSongsList()); //vises de sange der tilhørere playlisten
+                sangeIplayliste.setAll(p.getSongsList()); // Sangene i playlisten vises i vores ListView
             }
-        } else if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) //hvis brugeren klikker 2 gange
+        }
+        // Hvis brugeren klikker 2 gange popper redigeringsvinduet op
+        else if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2)
         {
-            Playlist p = tableViewPlaylists.getSelectionModel().getSelectedItem(); //variabel der gemmer den playliste der er markeret
-            if (p != null) { //tjek at der er en markeret playliste
-                redigerPlaylistLinje(p); //kalder redigerings vinduet
+            // Henter og gemmer den playliste der er markeret
+            Playlist p = tableViewPlaylists.getSelectionModel().getSelectedItem();
+
+            if (p != null) //Tjekker at der er en markeret playliste
+            {
+                redigerPlaylistLinje(p); // Kalder redigerings vinduet
             }
         }
     }
 
-    //metode til hvad der sker hvis brugeren bruger piletast op eller ned i playliste tableview
-    @FXML
+    @FXML // Metode til at brugeren kan bruge piletasterne op/ned i tableView for hurtigt at se sangene i playlisterne
     void tastOpNedPlaylists(KeyEvent event)
     {
-        switch (event.getCode()) //getCode henter hvilken tast brugeren har klikket på
+        switch (event.getCode()) // GetCode henter hvilken tast brugeren har klikket på
         {
-            case UP: //pil up tasten -> ingen break efter, da den skal udføre samme handling for begge taster
-            case DOWN: //pil ned tasten
-                Playlist p = tableViewPlaylists.getSelectionModel().getSelectedItem(); //henter den playliste som brugeren har markeret
+            case UP: // Pil op tasten
+                // Ingen break her, da den skal hoppe videre udføre samme handling for begge taster
+            case DOWN: // Pil ned tasten
+
+                // Henter den playliste som brugeren har markeret
+                Playlist p = tableViewPlaylists.getSelectionModel().getSelectedItem();
+
+                // Tjekker at brugeren har markeret en playliste
                 if (p != null)
                 {
-                    sangeIplayliste.setAll(p.getSongsList()); //så vises sange der tilhører playlisten
+                    sangeIplayliste.setAll(p.getSongsList()); // Viser de sange der tilhører playlisten
                 }
                 break;
         }
     }
 
-    @FXML
+    @FXML // Metode til at slette en playliste (knap: Delete playlist)
     void handleDeletePlaylist(ActionEvent event)
     {
-        Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem(); //henter den playliste som brugeren har markeret
+        // Henter den playliste som brugeren har markeret
+        Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem();
 
-        if (valgtPlayliste != null) //hvis brugeren har markeret en playliste
+        // Tjekker at brugeren har markeret en playliste
+        if (valgtPlayliste != null)
         {
-            //opretter et vindue hvor brugeren kan bekræfte at den skulle slettes
+            // Opretter et vindue hvor brugeren kan bekræfte at den skal slettes
             Alert erDuSikkerAlarm = new Alert(Alert.AlertType.CONFIRMATION);
             erDuSikkerAlarm.setTitle("Delete Playlist");
             erDuSikkerAlarm.setHeaderText("Are you sure you want to delete this playlist?");
 
-            Optional<ButtonType> beslutning = erDuSikkerAlarm.showAndWait(); //venter på at brugeren klikker ok
+            Optional<ButtonType> beslutning = erDuSikkerAlarm.showAndWait(); // Venter på at brugeren klikker ok
 
-            //hvis brugeren klikker ok
+            // Hvis brugeren klikker ok
             if (beslutning.isPresent() && beslutning.get() == ButtonType.OK)
             {
-                //stop afspilningen hvis der afspilles en sang fra den playliste der slettes
+                // Stop afspilningen hvis der afspilles en sang fra den playliste der slettes
                 if (currentSong != null && valgtPlayliste.getSongsList().contains(currentSong))
                 {
                     if (mediaPlayer != null)
@@ -308,42 +337,47 @@ public class MyTunesController {
                     listViewSongsOnPlaylist.getSelectionModel().clearSelection();
                 }
 
-                //slettes playlisten fra playlist listen
+                // Sletter playlisten fra listen med playlister
                 playlister.remove(valgtPlayliste);
-                sangeIplayliste.clear(); //clear listView'et
+                sangeIplayliste.clear(); // Clear ListView
+
+                // Sætter markøren til den sidste playliste i tableViewet -> så brugeren kan slette hele listen hurtigt ved behov
+                tableViewPlaylists.getSelectionModel().selectLast();
             }
 
-            //hvis brugeren klikker cancel
+            // Hvis brugeren klikker cancel
             if (beslutning.isPresent() && beslutning.get() == ButtonType.CANCEL)
             {
                 System.out.println("Nothing got deleted");
             }
         }
-        else //hvis brugeren ikke har markeret en playliste, så meldes der fejl
+        else // Hvis brugeren ikke har markeret en playliste, så får man besked
         {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Please choose a Playlist to Delete!");
             alert.showAndWait();
         }
     }
 
-    @FXML
+    @FXML // Metode til at slette en sang (knap: Delete song)
     void handleDeleteSong(ActionEvent event)
     {
-        Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret og gemmer i variablen valgtSang
+        // Henter den sang som brugeren har markeret og gemmer i variablen valgtSang
+        Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem();
 
-        if (valgtSang != null) //hvis brugeren har markeret en sang
+        // Tjekker at brugeren har valgt en sang
+        if (valgtSang != null)
         {
-            //opretter et vindue hvor brugeren kan bekræfte at den skulle slettes
+            // Opretter et vindue hvor brugeren kan bekræfte at den skal slettes
             Alert erDuSikkerAlarm = new Alert(Alert.AlertType.CONFIRMATION);
             erDuSikkerAlarm.setTitle("Delete Song");
             erDuSikkerAlarm.setHeaderText("Are you sure you want to delete this song?");
 
-            Optional<ButtonType> beslutning = erDuSikkerAlarm.showAndWait(); //venter på at brugeren klikker ok
+            Optional<ButtonType> beslutning = erDuSikkerAlarm.showAndWait(); // Venter på at brugeren klikker ok
 
-            //hvis brugeren klikker ok
+            // Hvis brugeren klikker ok
             if (beslutning.isPresent() && beslutning.get() == ButtonType.OK)
             {
-                //stop afspilningen hvis den slettede sang spiller
+                // Stop afspilningen hvis den slettede sang spiller
                 if (currentSong != null && currentSong.equals(valgtSang))
                 {
                     if (mediaPlayer != null)
@@ -360,43 +394,48 @@ public class MyTunesController {
                     listViewSongsOnPlaylist.getSelectionModel().clearSelection();
                 }
 
-                //sangen slettes fra sang listen (ObservableList sange)
+                // Sangen slettes fra listen med sange (ObservableList sange)
                 sange.remove(valgtSang);
 
-                //sætter markøren til den sidste sang i tableViewet -> så brugeren kan slette hele listen hurtigt ved behov
+                // Sætter markøren til den sidste sang i tableViewet -> så brugeren kan slette hele listen hurtigt ved behov
                 tableViewSongs.getSelectionModel().selectLast();
             }
 
-            //hvis brugeren klikker cancel
+            // Hvis brugeren klikker cancel
             if (beslutning.isPresent() && beslutning.get() == ButtonType.CANCEL)
             {
                 System.out.println("Nothing got deleted");
             }
 
-        } else { //hvis brugeren ikke har markeret en sang, så meldes der fejl
+        }
+        else // Hvis brugeren ikke har markeret en sang, så får man besked
+        {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Please choose a song to delete!");
             alert.showAndWait();
         }
     }
 
-    @FXML
-    void handleDeleteSongFromPlaylist(ActionEvent event) {
+    @FXML // Metode til at slette en sang fra en playliste (knap: Delete song from playlist)
+    void handleDeleteSongFromPlaylist(ActionEvent event)
+    {
+        // Henter den playliste og den sang som brugeren har markeret
         Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem();
         Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem();
 
+        // Tjekker at brugeren både har valgt en playliste og en sang
         if (valgtPlayliste != null && valgtSang != null)
         {
-            //opretter et vindue hvor brugeren kan bekræfte at den skulle slettes
+            // Opretter et vindue hvor brugeren kan bekræfte at den skal slettes
             Alert erDuSikkerAlarm = new Alert(Alert.AlertType.CONFIRMATION);
             erDuSikkerAlarm.setTitle("Delete Song from Playlist");
             erDuSikkerAlarm.setHeaderText("Are you sure you want to delete this song from the playlist?");
 
-            Optional<ButtonType> beslutning = erDuSikkerAlarm.showAndWait(); //venter på at brugeren klikker ok
+            Optional<ButtonType> beslutning = erDuSikkerAlarm.showAndWait(); // Venter på at brugeren klikker ok
 
-            //hvis brugeren klikker ok
+            // Hvis brugeren klikker ok
             if (beslutning.isPresent() && beslutning.get() == ButtonType.OK)
             {
-                //afspilningen stoppes hvis den slettede sang spiller
+                // Afspilningen stoppes hvis den slettede sang spiller
                 if (currentSong != null && currentSong.equals(valgtSang))
                 {
                     if  (mediaPlayer != null)
@@ -413,316 +452,399 @@ public class MyTunesController {
                     listViewSongsOnPlaylist.getSelectionModel().clearSelection();
                 }
 
-                //sangen slettes i playlisten
+                // Sletter sangen i playlisten
                 valgtPlayliste.getSongsList().remove(valgtSang);
-                sangeIplayliste.setAll(valgtPlayliste.getSongsList()); //listen opdateres
+                sangeIplayliste.setAll(valgtPlayliste.getSongsList()); // ListViewet opdateres
 
-                //sætter markøren til den sidste sang i listViewet -> så brugeren kan slette hele listen hurtigt ved behov
+                // Sætter markøren til den sidste sang i listViewet -> så brugeren kan slette hele listen hurtigt ved behov
                 listViewSongsOnPlaylist.getSelectionModel().selectLast();
             }
 
-            //hvis brugeren klikker cancel
+            // Hvis brugeren klikker cancel
             if (beslutning.isPresent() && beslutning.get() == ButtonType.CANCEL)
             {
                 System.out.println("Nothing got deleted");
             }
         }
-        else //error hvis brugeren ikke har markeret både en playliste og en sang
+        else // Hvis brugeren ikke har markeret både en playliste og en sang, får man besked
         {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a Playlist and a song!");
             alert.showAndWait();
         }
     }
 
-    @FXML
+    @FXML // Metode der kalder redigerings metoden når brugeren klikker på knap: Edit playlist
     void handleEditPlaylist(ActionEvent event)
     {
-        Playlist p = tableViewPlaylists.getSelectionModel().getSelectedItem(); //variabel der gemmer den playliste der er markeret
-        if (p != null) { //tjek at der er en markeret playliste
-            redigerPlaylistLinje(p); //kalder redigerings vinduet
-        } else {
+        // Henter den playliste der er markeret
+        Playlist p = tableViewPlaylists.getSelectionModel().getSelectedItem();
+
+        // Tjekker at der er markeret en playliste
+        if (p != null)
+        {
+            redigerPlaylistLinje(p); // Kalder redigerings vinduet
+        }
+        else // Hvis brugeren ikke har valgt en playliste, får man besked
+        {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Please choose a Playlist to edit!");
             alert.showAndWait();
         }
     }
 
-    @FXML
+    @FXML // Metode der kalder redigerings metoden når brugeren klikker på knap: Edit song
     void handleEditSong(ActionEvent event)
     {
-        Song s = tableViewSongs.getSelectionModel().getSelectedItem(); //variabel der gemmer den sang der er markeret
-        if (s != null) { //tjek at der er en markeret sang
-            redigerSangLinje(s); //kalder redigerings vinduet
-        } else {
+        // Henter den sang der er markeret
+        Song s = tableViewSongs.getSelectionModel().getSelectedItem();
+
+        // Tjekker at der er en markeret en sang
+        if (s != null)
+        {
+            redigerSangLinje(s); // Kalder redigerings vinduet
+        }
+        else // Hvis brugeren ikke har valgt en sang, får man besked
+        {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Please choose a Song to edit!");
             alert.showAndWait();
         }
     }
 
-    @FXML
-    void handleMoveSongDown(ActionEvent event) {
-        try {
-            Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
-            Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem(); //henter den playliste som sangen hører under
+    @FXML // Metode til at brugeren kan flytte en sang ned i ListViewet (sange i en playliste) (Knap: pil ned)
+    void handleMoveSongDown(ActionEvent event)
+    {
+        try
+        {
+            // Henter den sang og den playliste som brugeren har markeret
+            Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem();
+            Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem();
 
-            if (valgtSang != null) //hvis brugeren har markeret en sang
+            // Tjekker at brugeren har markeret en sang
+            if (valgtSang != null)
             {
-                int i = sangeIplayliste.indexOf(valgtSang); //henter den plads/index som sangen står på
+                // Henter den plads/index som sangen står på
+                int i = sangeIplayliste.indexOf(valgtSang);
+                // Henter sangen under den valgte sang
                 Song næsteSang = sangeIplayliste.get(i + 1);
 
-                sangeIplayliste.set(i, næsteSang); //den næste sang flyttes en plads op i listview
-                sangeIplayliste.set(i + 1, valgtSang); //den valgte sang flyttes en plads ned i listView
+                // De 2 sange bytter plads
+                sangeIplayliste.set(i, næsteSang); // Sangen under flyttes en plads op i ListView
+                sangeIplayliste.set(i + 1, valgtSang); // Den valgte sang flyttes en plads ned i ListView
 
-                listViewSongsOnPlaylist.getSelectionModel().select(valgtSang); //sætter markeringen efter flyt
+                // Sætter markeringen på den valgte sang efter den er blevet flyttet
+                listViewSongsOnPlaylist.getSelectionModel().select(valgtSang);
 
-                //den nye rækkefølge af sange gemmes
+                // Den nye rækkefølge af sange gemmes
                 valgtPlayliste.setSongsList(new ArrayList<>(sangeIplayliste));
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) // Fanger fejlen hvis brugeren prøver at flytte den nederste sang ned
+        {
             System.out.println("The song is already at the bottom: " + e.getMessage());
         }
     }
 
-    @FXML
-    void handleMoveSongUp(ActionEvent event) {
-        try {
-            Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem(); //henter den sang som brugeren har markeret
-            Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem(); //henter den playliste som sangen hører under
+    @FXML // Metode til at brugeren kan flytte en sang op i ListViewet (sange i en playliste) (Knap: pil op)
+    void handleMoveSongUp(ActionEvent event)
+    {
+        try
+        {
+            // Henter den sang og den playliste som brugeren har markeret
+            Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem();
+            Playlist valgtPlayliste = tableViewPlaylists.getSelectionModel().getSelectedItem();
 
-            if (valgtSang != null) //hvis brugeren har markeret en sang
+            // Tjekker at brugeren har markeret en sang
+            if (valgtSang != null)
             {
-                int i = sangeIplayliste.indexOf(valgtSang); //henter den plads/index som sangen står på
+                // Henter den plads/index som sangen står på
+                int i = sangeIplayliste.indexOf(valgtSang);
+                // Henter sangen over den valgte sang
                 Song næsteSang = sangeIplayliste.get(i - 1);
 
-                sangeIplayliste.set(i, næsteSang); //den næste sang flyttes en plads ned i listview
-                sangeIplayliste.set(i - 1, valgtSang); //den valgte sang flyttes en plads op i listView
+                // De 2 sange bytter plads
+                sangeIplayliste.set(i, næsteSang); // Sangen under flyttes en plads ned i ListView
+                sangeIplayliste.set(i - 1, valgtSang); // Den valgte sang flyttes en plads op i ListView
 
-                listViewSongsOnPlaylist.getSelectionModel().select(valgtSang); //sætter markeringen efter flyt
+                // Sætter markeringen på den valgte sang efter den er blevet flyttet
+                listViewSongsOnPlaylist.getSelectionModel().select(valgtSang);
 
-                //den nye rækkefølge af sange gemmes
+                // Den nye rækkefølge af sange gemmes
                 valgtPlayliste.setSongsList(new ArrayList<>(sangeIplayliste));
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) // Fanger fejlen hvis brugeren prøver at flytte den øverste sang op
+        {
             System.out.println("The song is already at the top: " + e.getMessage());
         }
     }
 
-    //metode til at afspille musik
+    // Metode til at afspille en sang
     public void playSong(Song valgtSang)
     {
         try
         {
-            //hvis der ikke er valgt en sang sker der ingen ting -> metoden stoppes ved return
+            // Hvis der ikke er valgt en sang sker der ingen ting -> metoden stoppes ved return
             if (valgtSang == null)
             {
                 return;
             }
 
-            //hvis det er samme sang og den er pauset, så play/afspil
+            // Hvis det er samme sang og den er pauset, så play/afspil
             if (mediaPlayer != null && valgtSang.equals(currentSong) && mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED)
             {
                 mediaPlayer.play();
                 return;
             }
 
-            //hvis der i forvejen afspilles musik, stoppes den inden den nye valgte sang afspilles
+            // Hvis der i forvejen afspilles musik, stoppes den inden den nye valgte sang afspilles
             if (mediaPlayer != null)
             {
                 mediaPlayer.stop();
             }
 
-            //henter fil-stien til sangen via getMusicFile()
+            // Henter fil-stien til sangen via getMusicFile()
             String filSti = new File(valgtSang.getMusicFile()).toURI().toString();
 
-            //opretter et Medie/musikfilen, opretter Medieplayer med mediet indeni
+            // Opretter et Medie der indeholder musikfilen og opret Medieplayer med mediet indeni
             Media media = new Media(filSti);
             mediaPlayer = new MediaPlayer(media);
 
-            //hver gang der bliver oprettet en ny mediaPlayer, så mister man de tidligere volumen indstillinger
-            //volumen slider sættes derfor til det nye mediaPlayer objekt, hver gang man spiller en ny sang
-            mediaPlayer.setVolume(volumenSlider.getValue() / 100); //konverterer fra procent (0 - 100) til brøk (0.0 - 1.0)
+            // Hver gang der bliver oprettet en ny mediaPlayer, så mister man de tidligere volumen indstillinger
+            // Volumen slider sættes derfor til det nye mediaPlayer objekt, hver gang man spiller en ny sang
+            mediaPlayer.setVolume(volumenSlider.getValue() / 100); // Konverterer fra procent (0 - 100) til brøk (0.0 - 1.0)
 
-            currentSong = valgtSang; //gemmer den valgte sang som currentSong
+            currentSong = valgtSang; // Gemmer den valgte sang som currentSong
 
-            //udskriver hvilken sang der afspilles, så brugeren kan se det
+            // Udskriver hvilken sang der afspilles, så brugeren kan se det
             currentlyPlayingSong.setText(valgtSang.getTitle());
 
-            mediaPlayer.play(); //afspiller sangen
+            mediaPlayer.play(); // Afspiller sangen
 
-            //næste sang afspilles automatisk
-            mediaPlayer.setOnEndOfMedia(() -> {
+            // Næste sang afspilles automatisk når en sang er færdig
+            mediaPlayer.setOnEndOfMedia(() ->
+            {
+                // Henter index/placering af den sang der afspilles lige nu
                 int index = currentSongList.indexOf(currentSong);
+
+                // Tjekker at der findes en næste sang
                 if (index < currentSongList.size() - 1)
                 {
+                    // Henter index/placering af den næste sang
                     Song næsteSang = currentSongList.get(index + 1);
+                    // Afspiller næste sang
                     playSong(næsteSang);
 
-                    //flytter markøren, så brugeren kan se hvilken sang der automatisk afspilles
-                    if (currentSongList == tableViewSongs.getItems()) {
+                    // Tjekker om der afspilles fra TableView (alle sange)
+                    if (currentSongList == tableViewSongs.getItems())
+                    {
+                        // Flytter markøren, så brugeren kan se hvilken sang der nu afspilles
                         tableViewSongs.getSelectionModel().select(næsteSang);
                         tableViewSongs.scrollTo(næsteSang);
                     }
-                    else
+                    else // Hvis der afspilles fra ListView (sange i playliste)
                     {
+                        // Flytter markøren, så brugeren kan se hvilken sang der nu afspilles
                         listViewSongsOnPlaylist.getSelectionModel().select(næsteSang);
                         listViewSongsOnPlaylist.scrollTo(næsteSang);
                     }
                 }
             });
 
-        } catch (Exception e) { //hvis der sker en fejl i afspilningen, så får brugeren besked
+        }
+        catch (Exception e) // Hvis der sker en fejl i afspilningen, så får brugeren besked
+        {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Error. The file could not be played!");
             alert.show();
         }
     }
 
-    //metode der holder styr på brugerens sangvalg i listView
-    @FXML
+    @FXML // Metode der holder styr på brugerens sangvalg i ListView -> nødvendig fordi TableView overruler ListView
     void handleSongSelectedFromListView(MouseEvent event)
     {
+        // Henter den markerede sang i ListView
         Song valgtSang = listViewSongsOnPlaylist.getSelectionModel().getSelectedItem();
 
+        //Tjekker at brugeren har valgt en sang
         if (valgtSang != null)
         {
+            // Den valgte sang gemmes i currentSong
             currentSong = valgtSang;
+            // Den liste som den valgte sang befinder sig i gemmes i currentSongList
             currentSongList = listViewSongsOnPlaylist.getItems();
+            // Sørger for at markøren fjernes fra TableView, så der sikres at vi befinder os i ListView og at der ikke sker fejl
             tableViewSongs.getSelectionModel().clearSelection();
         }
     }
 
-    //metode der holder styr på brugerens sangvalg i tableView
-    @FXML
+    @FXML // Metode der holder styr på brugerens sangvalg i tableView -> nødvendig fordi TableView overruler ListView
     void handleSongSelectedFromTableView(MouseEvent event)
     {
+        // Henter den markerede sang i TableView
         Song valgtSang = tableViewSongs.getSelectionModel().getSelectedItem();
 
+        //Tjekker at brugeren har valgt en sang
         if (valgtSang != null)
         {
+            // Den valgte sang gemmes i currentSong
             currentSong = valgtSang;
+            // Den liste som den valgte sang befinder sig i gemmes i currentSongList
             currentSongList = tableViewSongs.getItems();
+            // Sørger for at markøren fjernes fra ListView, så der sikres at vi befinder os i ListView og at der ikke sker fejl
             listViewSongsOnPlaylist.getSelectionModel().clearSelection();
         }
     }
 
-    @FXML
+    @FXML // Metode der håndterer play knappen -> Afspiller den valgte sang eller genoptager, hvis den er på pause
     void handlePlaySong(MouseEvent event)
     {
+        // Tjekker at der findes en mediaPlayer og at den er sat på pause
         if (mediaPlayer != null && mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED)
         {
-            mediaPlayer.play();
-            return;
+            mediaPlayer.play(); // Genoptager afspilningen fra der hvor den nåede til
+            return; // Metoden afbrydes her
         }
 
+        // Tjekker at brugeren har valgt en sang
         if (currentSong != null)
         {
-            playSong(currentSong);
+            playSong(currentSong); // Afspiller sangen
         }
-        else
+        else // Hvis ikke brugeren har valgt en sang, får man besked
         {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a song to play!");
             alert.show();
         }
     }
 
-    @FXML
+    @FXML // Metode der håndtere pause knappen -> hvis man klikker på den pauses sangen
     void handlePauseSong(MouseEvent event)
     {
-        if (mediaPlayer != null) //hvis der afspilles en sang
+        // Tjekker at der findes en mediaPlayer
+        if (mediaPlayer != null)
         {
-            mediaPlayer.pause();
+            mediaPlayer.pause(); // Sætter sangen på pause
         }
-        else
+        else // Hvis ikke der findes en mediaPlayer, så får brugeren besked
         {
             System.out.println("Please select a song to play or pause!");
         }
     }
 
-    //metode til søge-knappen
-    @FXML
-    void handleSearch(ActionEvent event) {
+    @FXML // Metode der håndtere søge knappen -> hvis man klikker på search vises en filtreret liste
+    void handleSearch(ActionEvent event)
+    {
+        // Henter søge teksten og konvertere den til små bogstaver
         String searchTerm = searchField.getText().toLowerCase();
+
+        // filtered() returnere en ny liste med de sange der matcher søge teksten
         ObservableList<Song> filteredSongs = sange.filtered(song ->
+                // Tager hver sangs titel (alle sange) og konvertere dem til små bogstaver, hvorefter der tjekkes om søge teksten matcher sangen
                 song.getTitle().toLowerCase().contains(searchTerm)
         );
+        // Den nye liste med sang-matches vises i TableView (alle sange)
         tableViewSongs.setItems(filteredSongs);
     }
 
-    //metode til at søge på sange imens man taster søgeordet
-    @FXML
+    @FXML // Metode til at håndtere søgefeltet -> når brugeren taster søge ord ind søges der på sange imens man taster
     void handleSearchTextField(KeyEvent event)
     {
-        //henter teksten fra søgefeltet
+        // Henter søge teksten
         String søgeOrd = searchField.getText();
 
-        //opret en ny tom observable list til de filtrerede sange
-        ObservableList<Song> filteredSongs= FXCollections.observableArrayList();
+        // Opretter en ny tom observable list til de filtrerede sange
+        ObservableList<Song> filteredSongs = FXCollections.observableArrayList();
 
-        //for-løkke der gennemgår alle sangene
-        for (Song song : sange) {
-            //hvis kontaktens navn indeholder søgeteksten -> tilføj den til den filtrerede liste
-            if (song.getTitle().toLowerCase().contains(søgeOrd)) {
+        // for-løkke der gennemgår alle sangene
+        for (Song song : sange)
+        {
+            // Hvis sangens navn indeholder søgeteksten -> tilføjes sangen til den filtrerede liste
+            if (song.getTitle().toLowerCase().contains(søgeOrd))
+            {
                 filteredSongs.add(song);
             }
         }
 
-        //opdater ListView med den filtrerede liste
+        // Den nye liste med sang-matches vises i TableView (alle sange)
         tableViewSongs.setItems(filteredSongs);
     }
 
-    @FXML
+    @FXML // Metode der håndtere skip knappen -> Hvis man klikker på skip afspilles næste sang
     void handleSkipSong(ActionEvent event)
     {
-        try {
+        try
+        {
+            // Henter index/placering af sangen der afspilles lige nu
             int index = currentSongList.indexOf(currentSong);
 
-            if (index >= 0 && index < currentSongList.size() - 1) {
+            // Tjekker at der findes en næste sang
+            if (index >= 0 && index < currentSongList.size() - 1)
+            {
+                // Henter index/placering af den næste sang
                 Song næsteSang = currentSongList.get(index + 1);
+                // Afspiller næste sang
                 playSong(næsteSang);
 
-                //flytter markøren, så brugeren kan se hvilken sang der er skippet til
-                if (currentSongList == tableViewSongs.getItems()) {
+                // Tjekker om der afspilles fra TableView (alle sange)
+                if (currentSongList == tableViewSongs.getItems())
+                {
+                    // Flytter markøren, så brugeren kan se hvilken sang der nu afspilles
                     tableViewSongs.getSelectionModel().select(næsteSang);
                     tableViewSongs.scrollTo(næsteSang);
-                } else {
+                }
+                else // Hvis der afspilles fra ListView (sange i playliste)
+                {
+                    // Flytter markøren, så brugeren kan se hvilken sang der nu afspilles
                     listViewSongsOnPlaylist.getSelectionModel().select(næsteSang);
                     listViewSongsOnPlaylist.scrollTo(næsteSang);
                 }
             }
         }
-        catch (Exception e)
+        catch (Exception e) // Hvis der sker en fejl, så får man besked
         {
             System.out.println("Could not skip the song: " + e.getMessage());
         }
     }
 
-    @FXML
+    @FXML // Metode der håndtere back knappen -> Hvis man klikker på back afspilles forrige sang
     void handleBackToPreviousSong(ActionEvent event)
     {
-        try {
+        try
+        {
+            // Henter index/placering af sangen der afspilles lige nu
             int index = currentSongList.indexOf(currentSong);
 
-            if (index > 0) {
+            // Tjekker at der findes en forrig sang
+            if (index > 0)
+            {
+                // Henter index/placering af den forrige sang
                 Song forrigeSang = currentSongList.get(index - 1);
+                // Afspiller den forrige sang
                 playSong(forrigeSang);
 
-                //flytter markøren, så brugeren kan se hvilken sang der er skippet til
-                if (currentSongList == tableViewSongs.getItems()) {
+                // Tjekker om der afspilles fra TableView (alle sange)
+                if (currentSongList == tableViewSongs.getItems())
+                {
+                    // Flytter markøren, så brugeren kan se hvilken sang der nu afspilles
                     tableViewSongs.getSelectionModel().select(forrigeSang);
                     tableViewSongs.scrollTo(forrigeSang);
-                } else {
+                }
+                else // Hvis der afspilles fra ListView (sange i playliste)
+                {
+                    // Flytter markøren, så brugeren kan se hvilken sang der nu afspilles
                     listViewSongsOnPlaylist.getSelectionModel().select(forrigeSang);
                     listViewSongsOnPlaylist.scrollTo(forrigeSang);
                 }
             }
         }
-        catch (Exception e)
+        catch (Exception e) // Hvis der sker en fejl, så får man besked
         {
             System.out.println("Could not skip back to the previous song: " + e.getMessage());
         }
     }
 
-    //Metode til at redigere en Playliste ved at åbne modalt dialogvindue med data i
-    private void redigerPlaylistLinje(Playlist p) {
-        //lav vinduet som en dialog med 3 tekstfelter med data
+    // Metode til at redigere en Playliste ved at åbne modalt dialogvindue med data i
+    private void redigerPlaylistLinje(Playlist p)
+    {
+        // Opretter vinduet som en dialog med et tekstfelt med data
         Dialog<ButtonType> dialogvindue = new Dialog();
         dialogvindue.setTitle("Edit Playlist");
         dialogvindue.setHeaderText("Edit Playlist");
@@ -730,26 +852,30 @@ public class MyTunesController {
         TextField name = new TextField();
         name.setPromptText("Enter name");
 
-        VBox box = new VBox(10, name); //10 pixels mellemrum mellem hver tekst felt
+        // Opretter en VBox med tekst feltet
+        VBox box = new VBox(name);
+        // Indsætter VBox i dialogen
         dialogvindue.getDialogPane().setContent(box);
 
-        //Sæt data i felterne fra playliste-objektet
+        // Sætter data fra playliste-objektet ind i name-feltet
         name.setText(p.getName());
 
-        //Her afsluttes dialogen med at man kan trykke på OK
+        // Her afsluttes dialogen med at man kan trykke på OK
         Optional<ButtonType> knap = dialogvindue.showAndWait();
 
-        // Hvis man trykker OK gemmes data fra felterne og tabellen opdateres
-        if (knap.isPresent() && knap.get() == ButtonType.OK) {
+        // Hvis man trykker OK gemmes data fra feltet og tabellen opdateres
+        if (knap.isPresent() && knap.get() == ButtonType.OK)
+        {
             p.setName(name.getText());
             tableViewPlaylists.refresh();
             tableViewPlaylists.sort();
         }
     }
 
-    //Metode til at redigere en sang ved at åbne modalt dialogvindue med data i
-    private void redigerSangLinje(Song s) {
-        // Lav vinduet som en dialog med to tekstfelter med data
+    // Metode til at redigere en sang ved at åbne modalt dialogvindue med data i
+    private void redigerSangLinje(Song s)
+    {
+        // Opretter vinduet som en dialog med tekstfelter med data
         Dialog<ButtonType> dialogvindue = new Dialog();
         dialogvindue.setTitle("Edit Song");
         dialogvindue.setHeaderText("Please enter information about the song");
@@ -764,37 +890,43 @@ public class MyTunesController {
         time.setPromptText("Enter time");
         TextField fileField = new TextField();
         fileField.setPromptText("Enter filename");
-        fileField.setEditable(false); //gør at brugeren ikke kan taste i feltet
+        fileField.setEditable(false); // Gør at brugeren ikke kan taste i feltet
 
-        //Opretter en file chooser knap
+        // Opretter en file chooser knap
         Button selectFileButton = new Button("Select File");
 
-        //sætter action på knappen til file chooser
-        selectFileButton.setOnAction(e -> {
-            FileChooser fileChooser = new FileChooser();
+        // Sætter action på knappen til file chooser
+        selectFileButton.setOnAction(e ->
+        {
+            FileChooser fileChooser = new FileChooser(); // Opretter en FileChooser med info tekst og krav til filtyper
             fileChooser.setTitle("Select a File");
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Music File", "*.mp3", "*.wav"));
+
+            // Åbner FileChooser hvori brugeren kan vælge en musikfil
             File valgtFil = fileChooser.showOpenDialog(dialogvindue.getDialogPane().getScene().getWindow());
-            if (valgtFil != null) //hvis der er valgt en fil, så sættes tekstfeltet til den valgte fil
+
+            // Hvis der er valgt en fil, så udfyldes tekstfeltet med filstien, så brugeren kan se at man har valgt en fil
+            if (valgtFil != null)
             {
                 fileField.setText(valgtFil.getAbsolutePath());
             }
         });
 
+        // Opretter en VBox med alle elemeterne og 10 pixels mellemrum
         VBox box = new VBox(10, title, artist, categoryBox, time, fileField, selectFileButton); //10 pixels mellemrum mellem hver tekst felt
         dialogvindue.getDialogPane().setContent(box);
 
-        //Sæt data i felterne fra sang-objektet
+        // Sæt data i felterne fra sang-objektet
         title.setText(s.getTitle());
         artist.setText(s.getArtist());
         categoryBox.setValue(s.getCategory());
         time.setText(s.getTime());
         fileField.setText(s.getMusicFile());
 
-        //Her afsluttes dialogen med at man kan trykke på OK
+        // Her afsluttes dialogen med at man kan trykke på OK
         Optional<ButtonType> knap = dialogvindue.showAndWait();
 
-        //Hvis man trykker OK gemmes data fra felterne og tabellen opdateres
+        // Hvis man trykker OK gemmes data fra felterne og tabellen opdateres
         if (knap.isPresent() && knap.get() == ButtonType.OK)
         {
             s.setTitle(title.getText());
@@ -808,68 +940,94 @@ public class MyTunesController {
         }
     }
 
-    //metode der gemmer en liste af Playlist-objekter i filen playlists.txt
-    private void skrivPlaylisteObjekter(ObservableList<Playlist> playlists) throws IOException {
+    // Metode der gemmer en liste af Playlist-objekter i filen playlists.txt
+    private void skrivPlaylisteObjekter(ObservableList<Playlist> playlists) throws IOException
+    {
+        // Opretter en binær fil kaldet playlists.txt
         FileOutputStream fileOutputStream = new FileOutputStream("playlists.txt");
+        // Opretter en ObjectOutputStream, der kan gemme objekter ned på en fil
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
 
+        // I filen starter objectOutputStream.writeInt med at skrive hvor mange playlister der findes i heltal (gør det lettere at læse filen)
         objectOutputStream.writeInt(playlists.size());
+
+        // for-løkke der kører alle playlister igennem
         for (Playlist p : playlists)
-            objectOutputStream.writeObject(p);
+            objectOutputStream.writeObject(p); // Skriver playlisten i filen
 
         objectOutputStream.flush();
-        objectOutputStream.close();
+        objectOutputStream.close(); // Sikre at alle data er gemt ved at lukke strømmen
     }
 
-    //metode der gemmer en liste af Song-objekter i filen songs.txt
-    private void skrivSongsObjekter(ObservableList<Song> songs) throws IOException {
+    // Metode der gemmer en liste af Song-objekter i filen songs.txt
+    private void skrivSongsObjekter(ObservableList<Song> songs) throws IOException
+    {
+        // Opretter en binær fil kaldet songs.txt
         FileOutputStream fileOutputStream = new FileOutputStream("songs.txt");
+        // Opretter en ObjectOutputStream, der kan gemme objekter ned på en fil
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
 
+        // I filen starter objectOutputStream.writeInt med at skrive hvor mange sange der findes i heltal (gør det lettere at læse filen)
         objectOutputStream.writeInt(songs.size());
+
+        // for-løkke der kører alle sange igennem
         for (Song s : songs)
             objectOutputStream.writeObject(s);
 
         objectOutputStream.flush();
-        objectOutputStream.close();
+        objectOutputStream.close(); // Sikre at alle data er gemt ved at lukke strømmen
     }
 
-    //metode der bruges til at gemme data når brugeren lukker vinduet
+    // Metode der bruges til at gemme data når brugeren lukker programmet
     public void gemData() throws IOException
     {
-        skrivPlaylisteObjekter(playlister);//gemmer Playlist objekter i filen playlists.txt
-        skrivSongsObjekter(sange); //gemmer Song objekter i filen songs.txt
+        skrivPlaylisteObjekter(playlister); // Gemmer Playlist-objekter i filen playlists.txt
+        skrivSongsObjekter(sange); // Gemmer Song-objekter i filen songs.txt
     }
 
-    //metode der indlæser gemte Playlister fra filen playlists.txt
-    private ObservableList<Playlist> læsPlaylistObjekter() throws IOException, ClassNotFoundException {
+    // Metode der indlæser gemte Playlister fra filen playlists.txt
+    private ObservableList<Playlist> læsPlaylistObjekter() throws IOException, ClassNotFoundException
+    {
+        // Opretter en tom ObservableList, der senere skal indeholde alle de gemte Playliste objekter fra filen
         ObservableList<Playlist> liste = FXCollections.observableArrayList();
+        // Åbner filen playlists.txt så den kan læses
         FileInputStream fileInputStream = new FileInputStream("playlists.txt");
+        // Opretter ObjectInputStream der kan læse objekter i en fil
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
+        // Først læses heltallet der angiver hvor mange Playlist objekter filen indeholder
         int antal = objectInputStream.readInt();
-        for (int i = 0; i < antal; ++i) {
-            Playlist p = (Playlist) objectInputStream.readObject();
-            liste.add(p);
+        // for-løkken kører alle Playlist objekterne igennem
+        for (int i = 0; i < antal; ++i)
+        {
+            Playlist p = (Playlist) objectInputStream.readObject(); // Læser objektet
+            liste.add(p); // Tilføjer objektet til ObservableListen
         }
 
-        objectInputStream.close();
-        return (ObservableList<Playlist>) liste;
+        objectInputStream.close(); // lukker strømmen for at ungå resource leaks
+        return (ObservableList<Playlist>) liste; // returnere listen, så den kan bruges i TableView (Playlists)
     }
 
-    //metode der indlæser gemte sange fra filen songs.txt
-    private ObservableList<Song> læsSangObjekter() throws IOException, ClassNotFoundException {
+    // Metode der indlæser gemte sange fra filen songs.txt
+    private ObservableList<Song> læsSangObjekter() throws IOException, ClassNotFoundException
+    {
+        // Opretter en tom ObservableList, der senere skal indeholde alle de gemte Song objekter fra filen
         ObservableList<Song> liste = FXCollections.observableArrayList();
+        // Åbner filen songs.txt så den kan læses
         FileInputStream fileInputStream = new FileInputStream("songs.txt");
+        // Opretter ObjectInputStream der kan læse objekter i en fil
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
+        // Først læses heltallet der angiver hvor mange Song objekter filen indeholder
         int antal = objectInputStream.readInt();
-        for (int i = 0; i < antal; ++i) {
-            Song s = (Song)objectInputStream.readObject();
-            liste.add(s);
+        // for-løkken kører alle Song objekterne igennem
+        for (int i = 0; i < antal; ++i)
+        {
+            Song s = (Song)objectInputStream.readObject(); // Læser objektet
+            liste.add(s); // Tilføjer objektet til ObservableListen
         }
 
-        objectInputStream.close();
-        return (ObservableList<Song>) liste;
+        objectInputStream.close(); // lukker strømmen for at ungå resource leaks
+        return (ObservableList<Song>) liste; // returnere listen, så den kan bruges i TableView (Songs)
     }
 }

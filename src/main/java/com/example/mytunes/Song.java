@@ -2,19 +2,19 @@ package com.example.mytunes;
 
 import java.io.Serializable;
 
-//denne klasse skal kunne gemmes på en fil -> derfor skal man implementere Serializable
+// Denne klasse skal kunne gemmes på en fil -> derfor skal Serializable implementeres
 public class Song implements Serializable
 {
-    private static final long serialVersionUID = 1L; //id til serialisering skal være unikt for hver klasse
+    private static final long serialVersionUID = 1L; // ID til serialisering skal være unikt for hver klasse
 
-    //definition af attributterne title, artist, category, time, musicFile
+    // Definition af attributterne
     private String title;
     private String artist;
     private String category;
     private String time;
     private String musicFile;
 
-    //konstruktør
+    // Konstruktør til Song
     public Song(String title, String artist, String category, String time, String musicFile)
     {
         this.title = title;
@@ -24,8 +24,7 @@ public class Song implements Serializable
         this.musicFile = musicFile;
     }
 
-    //der skal være getter-metoder og setter-metoder
-    //for at tableview Songs både kan hente data og indsætte ny data når brugeren redigere i en sang
+    // Get-metoder og set-metoder
     public String getTitle()
     {
         return title;
@@ -69,14 +68,14 @@ public class Song implements Serializable
     public String getMusicFile()
     {
         return musicFile;
-    } //bruges også til at hente musik filen når den skal afspilles
+    } // Bruges bl.a. til at hente musik filen når den skal afspilles
 
     public void setMusicFile(String musicFile)
     {
         this.musicFile = musicFile;
     }
 
-    //udseende på udskrift i vores listView i midten
+    // Udseende på udskrift i vores ListView i midten (sange der tilhører en playliste)
     @Override
     public String toString()
     {

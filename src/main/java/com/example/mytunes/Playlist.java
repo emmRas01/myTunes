@@ -3,48 +3,46 @@ package com.example.mytunes;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-//denne klasse skal kunne gemmes på en fil -> derfor skal man implementere Serializable
+// Denne klasse skal kunne gemmes på en fil -> derfor skal Serializable implementeres
 public class Playlist implements Serializable
 {
-    private static final long serialVersionUID = 2L; //id til serialisering skal være unikt for hver klasse
+    private static final long serialVersionUID = 2L; // ID til serialisering skal være unikt for hver klasse
 
-    //definition af Attribut name
+    // Definition af Attribut
     private String name;
 
-    //array-liste til at gemme en eller flere sang-objekter i en playliste
+    // Array-liste til at gemme en eller flere sang-objekter i en Playliste
     private ArrayList<Song> songs = new ArrayList<>();
 
-    //konstruktør
-    public Playlist(String name)
-    {
-        this.name = name;
-    }
-
-    //metode til at tilføje en sang til arrayListen der indeholder de sange der tilhører en playliste
+    // Metode til at tilføje en sang til Array Listen
     public void tilføjSang(Song s)
     {
         songs.add(s);
     }
 
-    //metode der returnere hele listen med sange der tilhøre en playliste
+    // Konstruktør til Playlist
+    public Playlist(String name)
+    {
+        this.name = name;
+    }
+
+    // Get-metode der returnere hele array-listen med sange der tilhører en Playliste
     public ArrayList<Song> getSongsList()
     {
         return songs;
     }
 
-    //setter-metode der opdatere hele Arraylisten med en ny liste af sange der tilhøre en playliste
+    // Set-metode der opdaterer hele Array-listen med en ny liste af sange der tilhøre en Playliste
     public void setSongsList(ArrayList<Song> songList)
     {
         songs = songList;
     }
 
-    //der skal være get-metoder og set-metoder
-    //for at tableview Playlist både kan hente data og indsætte ny data når brugeren redigere playliste navnet
+    // Get- og set-metode til name
     public String getName()
     {
         return name;
     }
-
     public void setName(String n)
     {
         name = n;
