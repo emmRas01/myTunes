@@ -657,7 +657,7 @@ public class MyTunesController
         }
     }
 
-    @FXML // Metode der holder styr på brugerens sangvalg i ListView -> nødvendig fordi TableView overruler ListView
+    @FXML // Metode der registrerer brugerens sangvalg i ListView -> nødvendig fordi TableView overruler ListView
     void handleSongSelectedFromListView(MouseEvent event)
     {
         // Henter den markerede sang i ListView
@@ -675,7 +675,7 @@ public class MyTunesController
         }
     }
 
-    @FXML // Metode der holder styr på brugerens sangvalg i tableView -> nødvendig fordi TableView overruler ListView
+    @FXML // Metode der registrerer brugerens sangvalg i tableView -> nødvendig fordi TableView overruler ListView
     void handleSongSelectedFromTableView(MouseEvent event)
     {
         // Henter den markerede sang i TableView
@@ -948,7 +948,8 @@ public class MyTunesController
         // Opretter en ObjectOutputStream, der kan gemme objekter ned på en fil
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
 
-        // I filen starter objectOutputStream.writeInt med at skrive hvor mange playlister der findes i heltal (gør det lettere at læse filen)
+        // I filen starter objectOutputStream.writeInt med at skrive hvor mange playlister der findes i heltal
+        // (gør det lettere at læse filen)
         objectOutputStream.writeInt(playlists.size());
 
         // for-løkke der kører alle playlister igennem
@@ -967,7 +968,8 @@ public class MyTunesController
         // Opretter en ObjectOutputStream, der kan gemme objekter ned på en fil
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
 
-        // I filen starter objectOutputStream.writeInt med at skrive hvor mange sange der findes i heltal (gør det lettere at læse filen)
+        // I filen starter objectOutputStream.writeInt med at skrive hvor mange sange der findes i heltal
+        // (gør det lettere at læse filen)
         objectOutputStream.writeInt(songs.size());
 
         // for-løkke der kører alle sange igennem
